@@ -1,0 +1,493 @@
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap");
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Vazirmatn", sans-serif;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* =========================
+   Main Page
+========================= */
+
+.register-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    padding: 55px 20px;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(215, 169, 75, 0.12),
+            transparent 25%
+        ),
+        #f3f6f9;
+}
+
+/* =========================
+   Back Home
+========================= */
+
+.register-back-home {
+    position: absolute;
+
+    top: 25px;
+    right: 35px;
+
+    color: #697586;
+
+    font-size: 13px;
+
+    transition: 0.2s;
+}
+
+.register-back-home:hover {
+    color: #173f5f;
+}
+
+/* =========================
+   Container
+========================= */
+
+.register-container {
+    width: min(1080px, 100%);
+    min-height: 700px;
+
+    background: #ffffff;
+
+    border-radius: 28px;
+
+    overflow: hidden;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    box-shadow:
+        0 25px 80px rgba(25, 45, 66, 0.12);
+}
+
+/* =========================
+   Information
+========================= */
+
+.register-info {
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(255, 255, 255, 0.08),
+            transparent 30%
+        ),
+        linear-gradient(
+            145deg,
+            #173f5f,
+            #0f2e46
+        );
+
+    color: white;
+
+    padding: 45px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================
+   Logo
+========================= */
+
+.register-logo {
+    color: white;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+.register-logo-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #d7a94b;
+
+    color: white;
+
+    border-radius: 13px;
+
+    font-size: 23px;
+
+    font-weight: 800;
+}
+
+.register-logo > div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-logo strong {
+    font-size: 18px;
+}
+
+.register-logo span {
+    color: #b8c8d4;
+
+    font-size: 10px;
+}
+
+/* =========================
+   Info Content
+========================= */
+
+.register-info-content {
+    margin: auto 0;
+}
+
+.register-small-title {
+    display: inline-block;
+
+    background: rgba(215, 169, 75, 0.15);
+
+    color: #e6bf70;
+
+    border-radius: 50px;
+
+    padding: 7px 15px;
+
+    margin-bottom: 18px;
+
+    font-size: 12px;
+}
+
+.register-info-content h1 {
+    font-size: 40px;
+
+    line-height: 1.5;
+
+    margin-bottom: 18px;
+}
+
+.register-info-content h1 span {
+    color: #e0b45d;
+}
+
+.register-info-content > p {
+    max-width: 430px;
+
+    color: #c2ced7;
+
+    line-height: 2;
+
+    font-size: 13px;
+
+    margin-bottom: 30px;
+}
+
+/* =========================
+   Features
+========================= */
+
+.register-feature {
+    display: flex;
+
+    align-items: center;
+
+    color: #dce5eb;
+
+    margin-bottom: 13px;
+
+    font-size: 13px;
+}
+
+.register-feature span {
+    width: 23px;
+    height: 23px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(215, 169, 75, 0.15);
+
+    color: #e0b45d;
+
+    border-radius: 6px;
+
+    margin-left: 9px;
+}
+
+.register-info-footer {
+    color: #8da3b3;
+
+    font-size: 11px;
+}
+
+/* =========================
+   Form Wrapper
+========================= */
+
+.register-form-wrapper {
+    padding: 55px 60px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+}
+
+.register-form-header {
+    margin-bottom: 28px;
+}
+
+.register-form-header h2 {
+    color: #182638;
+
+    font-size: 29px;
+
+    margin-bottom: 7px;
+}
+
+.register-form-header p {
+    color: #8a94a2;
+
+    font-size: 13px;
+}
+
+/* =========================
+   Form
+========================= */
+
+.register-form-group {
+    margin-bottom: 17px;
+}
+
+.register-form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #445064;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+/* =========================
+   Inputs
+========================= */
+
+.register-input-wrapper {
+    height: 51px;
+
+    display: flex;
+    align-items: center;
+
+    border: 1px solid #dce2e9;
+
+    border-radius: 11px;
+
+    overflow: hidden;
+
+    transition: 0.2s;
+}
+
+.register-input-wrapper:focus-within {
+    border-color: #173f5f;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(23, 63, 95, 0.08);
+}
+
+.register-input-icon {
+    width: 50px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #85909e;
+}
+
+.register-input-wrapper input {
+    flex: 1;
+
+    width: 100%;
+    height: 100%;
+
+    outline: none;
+
+    border: none;
+
+    background: transparent;
+
+    color: #344052;
+
+    font-size: 13px;
+
+    padding-left: 10px;
+}
+
+.register-input-wrapper input::placeholder {
+    color: #a9b0ba;
+}
+
+.register-show-password {
+    width: 50px;
+    height: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+/* =========================
+   Errors
+========================= */
+
+.register-input-error {
+    margin-top: 6px;
+
+    color: #d44747;
+
+    font-size: 11px;
+}
+
+/* =========================
+   Button
+========================= */
+
+.register-submit {
+    width: 100%;
+    height: 52px;
+
+    margin-top: 7px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: #173f5f;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.register-submit:hover {
+    background: #102f48;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(23, 63, 95, 0.18);
+}
+
+.register-submit:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+/* =========================
+   Login Link
+========================= */
+
+.register-login-link {
+    margin-top: 22px;
+
+    text-align: center;
+
+    color: #7d8795;
+
+    font-size: 12px;
+}
+
+.register-login-link a {
+    margin-right: 5px;
+
+    color: #b38329;
+
+    font-weight: 600;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 850px) {
+
+    .register-container {
+        grid-template-columns: 1fr;
+
+        max-width: 520px;
+    }
+
+    .register-info {
+        display: none;
+    }
+
+    .register-form-wrapper {
+        padding: 50px 35px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .register-page {
+        padding:
+            70px
+            15px
+            30px;
+    }
+
+    .register-back-home {
+        right: 20px;
+    }
+
+    .register-form-wrapper {
+        padding: 35px 22px;
+    }
+
+    .register-form-header h2 {
+        font-size: 25px;
+    }
+}
