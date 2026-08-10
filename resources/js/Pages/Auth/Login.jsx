@@ -1,100 +1,288 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import React, { useState } from "react";
+import { Head, Link, useForm } from "@inertiajs/react";
+import "../../../css/login.css";
 
-export default function Login({ status, canResetPassword }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
+export default function Login({ status }) {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const {
+        data,
+        setData,
+        post,
+        processing,
+        errors,
+        reset,
+    } = useForm({
+        email: "",
+        password: "",
         remember: false,
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('login'), {
-            onFinish: () => reset('password'),
+        post("/login", {
+            onFinish: () => reset("password"),
         });
     };
 
     return (
-        <GuestLayout>
-            <Head title="Log in" />
+        <>
+            <Head title="ورود به حساب کاربری" />
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+            <div className="login-page" dir="rtl">
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                <Link href="/" className="back-home">
+                    ← بازگشت به سایت
+                </Link>
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
+                <div className="login-container">
 
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
+                    {/* Right Side */}
+                    <div className="login-info">
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+                        <Link href="/" className="login-logo">
+                            <div className="login-logo-icon">
+                                H
+                            </div>
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                        >
-                            Forgot your password?
+                            <div>
+                                <strong>هتل آریا</strong>
+                                <span>ARIA HOTEL</span>
+                            </div>
                         </Link>
-                    )}
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
+                        <div className="login-info-content">
+
+                            <span className="login-small-title">
+                                خوش آمدید
+                            </span>
+
+                            <h1>
+                                مدیریت هوشمند
+                                <span> اقامت شما</span>
+                            </h1>
+
+                            <p>
+                                با ورود به حساب کاربری می‌توانید رزروهای خود
+                                را مشاهده، مدیریت و تجربه‌ای راحت‌تر از اقامت
+                                در هتل داشته باشید.
+                            </p>
+
+                            <div className="login-feature">
+                                <span>✓</span>
+                                مشاهده رزروهای فعال
+                            </div>
+
+                            <div className="login-feature">
+                                <span>✓</span>
+                                مشاهده تاریخچه رزروها
+                            </div>
+
+                            <div className="login-feature">
+                                <span>✓</span>
+                                مدیریت اطلاعات حساب
+                            </div>
+
+                            <div className="login-feature">
+                                <span>✓</span>
+                                ثبت نظر و امتیاز
+                            </div>
+
+                        </div>
+
+                        <div className="login-info-footer">
+                            اقامتی آرام، لوکس و به‌یادماندنی
+                        </div>
+
+                    </div>
+
+
+                    {/* Left Side */}
+                    <div className="login-form-wrapper">
+
+                        <div className="login-form-header">
+
+                            <h2>
+                                ورود به حساب
+                            </h2>
+
+                            <p>
+                                برای ادامه اطلاعات حساب خود را وارد کنید.
+                            </p>
+
+                        </div>
+
+
+                        {status && (
+                            <div className="login-status">
+                                {status}
+                            </div>
+                        )}
+
+
+                        <form
+                            onSubmit={submit}
+                            className="login-form"
+                        >
+
+                            {/* Email */}
+
+                            <div className="form-group">
+
+                                <label htmlFor="email">
+                                    ایمیل
+                                </label>
+
+                                <div className="input-wrapper">
+
+                                    <span className="input-icon">
+                                        ✉
+                                    </span>
+
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        value={data.email}
+                                        onChange={(e) =>
+                                            setData(
+                                                "email",
+                                                e.target.value
+                                            )
+                                        }
+                                        placeholder="example@email.com"
+                                        autoComplete="username"
+                                        autoFocus
+                                    />
+
+                                </div>
+
+                                {errors.email && (
+                                    <div className="input-error">
+                                        {errors.email}
+                                    </div>
+                                )}
+
+                            </div>
+
+
+                            {/* Password */}
+
+                            <div className="form-group">
+
+                                <label htmlFor="password">
+                                    رمز عبور
+                                </label>
+
+                                <div className="input-wrapper">
+
+                                    <span className="input-icon">
+                                        🔒
+                                    </span>
+
+                                    <input
+                                        id="password"
+                                        type={
+                                            showPassword
+                                                ? "text"
+                                                : "password"
+                                        }
+                                        value={data.password}
+                                        onChange={(e) =>
+                                            setData(
+                                                "password",
+                                                e.target.value
+                                            )
+                                        }
+                                        placeholder="رمز عبور خود را وارد کنید"
+                                        autoComplete="current-password"
+                                    />
+
+                                    <button
+                                        type="button"
+                                        className="show-password"
+                                        onClick={() =>
+                                            setShowPassword(
+                                                !showPassword
+                                            )
+                                        }
+                                    >
+                                        {showPassword
+                                            ? "🙈"
+                                            : "👁"}
+                                    </button>
+
+                                </div>
+
+                                {errors.password && (
+                                    <div className="input-error">
+                                        {errors.password}
+                                    </div>
+                                )}
+
+                            </div>
+
+
+                            <div className="login-options">
+
+                                <label className="remember-me">
+
+                                    <input
+                                        type="checkbox"
+                                        checked={data.remember}
+                                        onChange={(e) =>
+                                            setData(
+                                                "remember",
+                                                e.target.checked
+                                            )
+                                        }
+                                    />
+
+                                    <span>
+                                        مرا به خاطر بسپار
+                                    </span>
+
+                                </label>
+
+
+                                <Link
+                                    href="/forgot-password"
+                                    className="forgot-password"
+                                >
+                                    رمز عبور را فراموش کرده‌اید؟
+                                </Link>
+
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                className="submit-login"
+                                disabled={processing}
+                            >
+                                {processing
+                                    ? "در حال ورود..."
+                                    : "ورود به حساب"}
+                            </button>
+
+
+                            <div className="register-link">
+
+                                حساب کاربری ندارید؟
+
+                                <Link href="/register">
+                                    ثبت نام کنید
+                                </Link>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
                 </div>
-            </form>
-        </GuestLayout>
+
+            </div>
+        </>
     );
 }

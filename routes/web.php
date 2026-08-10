@@ -15,6 +15,14 @@ Route::get('/', function () {
 });
 
 
+
+Route::get('/forgotpass', function () {
+    return Inertia::render('ForgotPassword');
+});
+
+
+
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
