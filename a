@@ -1,0 +1,41 @@
+[33mcommit 3fa8e69728aa08fa19792623f65d5dda965d64a4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: c92a0db 7fd382a
+Author: iliaglzr <iliaglzr@gmail.com>
+Date:   Mon Aug 10 14:20:17 2026 +0330
+
+    Merge pull request #2 from reza-os/back_end
+    
+    setup login and room db
+
+[33mcommit c92a0db379ff7a46504b189e78d0921cc5d968e1[m
+Merge: eabf287 652f50c
+Author: reza <reza.programmer13838080@gmail.com>
+Date:   Mon Aug 10 14:19:50 2026 +0330
+
+    Merge pull request #1 from reza-os/frontEnd
+    
+     login and signup on front
+
+[33mcommit 652f50c4858cec1ef8181f81376bb5abc2a7f0d2[m[33m ([m[1;31morigin/frontEnd[m[33m)[m
+Author: rezapro <reza.programmer13838080@gmail.com>
+Date:   Mon Aug 10 14:15:24 2026 +0330
+
+    first commit on frontend
+
+[33mcommit 7fd382a85e7d169ee0bb2a0fe11e824e5c50a918[m[33m ([m[1;31morigin/back_end[m[33m, [m[1;32mback_end[m[33m)[m
+Author: iliaglzr <iliaglzr@gmail.com>
+Date:   Mon Aug 10 13:45:00 2026 +0330
+
+    setup login and room db
+
+[33mcommit eabf2873d39152cf53c8833e808dd9647b707f99[m
+Author: reza <reza.programmer13838080@gmail.com>
+Date:   Mon Aug 10 11:47:17 2026 +0330
+
+    Delete .env.example
+
+[33mcommit 7cecf4038c3864ff8ed739a13909e01d60716ace[m
+Author: rezapro <reza.programmer13838080@gmail.com>
+Date:   Mon Aug 10 11:42:40 2026 +0330
+
+    first commit
