@@ -23,16 +23,15 @@ Route::get('/forgotpass', function () {
 
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
 
     Route::get('/dashboard', function () {
+        if (auth()->user()->is_admin) {
+            return redirect(route('admin.dashboard', absolute: false));
+        }
         return Inertia::render('User/Dashboard');
     })->name('user.dashboard');
 
