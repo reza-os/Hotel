@@ -4,6 +4,8 @@ import {
     usePage,
 } from '@inertiajs/react';
 
+
+
 import AdminLayout from '@/Layouts/AdminLayout';
 
 import {
@@ -203,7 +205,7 @@ export default function Index({
                                         ).toLocaleString(
                                             'fa-IR'
                                         )}
-                                    </td>
+                                    </td> 
 
 
                                     <td className="p-4">
