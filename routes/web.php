@@ -23,10 +23,12 @@ Route::get('/forgotpass', function () {
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard');
+Route::middleware(['auth',])->group(function () {
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/admin/dashboard', function () {
+            return Inertia::render('Admin/Dashboard');
+        })->name('admin.dashboard');
+    });
 
     Route::get('/dashboard', function () {
         if (auth()->user()->is_admin) {
