@@ -97,4 +97,27 @@ class RoomController extends Controller
             'وضعیت اتاق بروزرسانی شد.'
         );
     }
+    public function create()
+    {
+        return Inertia::render('Admin/Rooms/Create');
+    }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'room_number' => 'required|unique:rooms,room_number',
+            'title' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'capacity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+        ]);
+
+        Room::create($validated);
+
+        return back()->with(
+            'success',
+            'اتاق با موفقیت ایجاد شد.'
+        );
+
+    }
 }
