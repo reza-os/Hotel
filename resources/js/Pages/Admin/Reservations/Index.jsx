@@ -165,7 +165,7 @@ export default function Index({
                                                     ?.email
                                             }
                                         </div>
-                                    </td>
+                                    </td>  
 
 
                                     <td className="p-4">
