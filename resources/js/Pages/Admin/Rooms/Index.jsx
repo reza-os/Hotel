@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, router, Link } from '@inertiajs/react';
 
 import AdminLayout from '@/Layouts/AdminLayout';
 
@@ -6,6 +6,7 @@ import {
     Power,
     Hammer,
     CheckCircle2,
+    Plus,
 } from 'lucide-react';
 
 
@@ -77,14 +78,28 @@ export default function Index({ rooms }) {
 
             <Head title="مدیریت اتاق‌ها" />
 
-            <div className="mb-6">
-                <h1 className="text-2xl font-black text-slate-900">
-                    مدیریت اتاق‌ها
-                </h1>
+            <div className="mb-6 flex items-center justify-between">
 
-                <p className="mt-1 text-sm text-slate-500">
-                    مشاهده و تغییر وضعیت اتاق‌های هتل
-                </p>
+                <div>
+                    <h1 className="text-2xl font-black text-slate-900">
+                        مدیریت اتاق‌ها
+                    </h1>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                        مشاهده و تغییر وضعیت اتاق‌های هتل
+                    </p>
+                </div>
+
+
+                <Link
+                    href="/admin/rooms/create"
+                    className="flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white"
+                >
+                    <Plus size={18} />
+
+                    افزودن اتاق
+                </Link>
+
             </div>
 
 
@@ -131,7 +146,7 @@ export default function Index({ rooms }) {
 
                             const status =
                                 statuses[
-                                    room.current_status
+                                room.current_status
                                 ];
 
                             return (
@@ -201,7 +216,7 @@ export default function Index({ rooms }) {
 
 
                                             {room.operational_status ===
-                                            'ready' ? (
+                                                'ready' ? (
 
                                                 <button
                                                     onClick={() =>
