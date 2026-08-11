@@ -2,21 +2,35 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Room extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'room_number',
-        'room_type_id',
-        'price',
+        'title',
+        'type',
         'capacity',
+        'price',
         'description',
-        'status',
+        'is_active',
+        'operational_status',
     ];
 
-    public function roomType()
+    protected function casts(): array
     {
-        return $this->belongsTo(RoomType::class);
+        return [
+            'is_active' => 'boolean',
+            'price' => 'decimal:0',
+        ];
+    }
+
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(Reservation::class);
     }
 }
