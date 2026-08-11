@@ -167,7 +167,7 @@ export default function Index({
                                         </div>
                                     </td>  
 
-
+  
                                     <td className="p-4">
                                         اتاق{' '}
                                         {
