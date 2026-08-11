@@ -4,6 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Admin\ReservationController;
 
 Route::get('/', function () {
     return Inertia::render('HotelHomepage', [
@@ -25,9 +28,9 @@ Route::get('/forgotpass', function () {
 
 Route::middleware(['auth',])->group(function () {
     Route::middleware(['admin'])->group(function () {
-        Route::get('/admin/dashboard', function () {
-            return Inertia::render('Admin/Dashboard');
-        })->name('admin.dashboard');
+        Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::resource('/admin/rooms', RoomController::class);
+        Route::resource('/admin/reservations', ReservationController::class);
     });
 
     Route::get('/dashboard', function () {
