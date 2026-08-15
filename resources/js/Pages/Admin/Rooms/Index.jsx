@@ -1,12 +1,20 @@
-import { Head, router, Link } from '@inertiajs/react';
+import {
+    Head,
+    Link,
+    router,
+    usePage,
+} from '@inertiajs/react';
+
+import { useState } from 'react';
 
 import AdminLayout from '@/Layouts/AdminLayout';
-
 import {
     Power,
     Hammer,
     CheckCircle2,
     Plus,
+    Pencil,
+    Trash2,
 } from 'lucide-react';
 
 
@@ -44,6 +52,26 @@ const statuses = {
 
 
 export default function Index({ rooms }) {
+    const [filter, setFilter] = useState('all');
+
+    const { errors } = usePage().props;
+
+    const deleteRoom = (room) => {
+        const confirmed = confirm(
+            `آیا از حذف اتاق ${room.room_number} مطمئن هستید؟`
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        router.delete(
+            `/admin/rooms/${room.id}`,
+            {
+                preserveScroll: true,
+            }
+        );
+    };
 
     const toggleActive = (room) => {
         router.patch(
@@ -142,7 +170,37 @@ export default function Index({ rooms }) {
 
                     <tbody>
 
-                        {rooms.map((room) => {
+
+                        <div className="mb-4 flex flex-wrap gap-2">
+                            {[
+                                ['all', 'همه'],
+                                ['available', 'خالی'],
+                                ['occupied', 'اشغال'],
+                                ['pending', 'در انتظار رزرو'],
+                                ['maintenance', 'در تعمیر'],
+                                ['inactive', 'غیرفعال'],
+                            ].map(([value, label]) => (
+                                <button
+                                    key={value}
+                                    onClick={() => setFilter(value)}
+                                    className={`rounded-xl px-4 py-2 text-sm ${filter === value
+                                            ? 'bg-slate-950 text-white'
+                                            : 'border bg-white text-slate-600'
+                                        }`}
+                                >
+                                    {label}
+                                </button>
+                            ))}
+                        </div>
+
+
+                        {errors?.room && (
+                            <div className="mb-5 rounded-xl bg-red-100 p-4 text-sm text-red-700">
+                                {errors.room}
+                            </div>
+                        )}
+
+                        {filteredRooms.map((room) => {
 
                             const status =
                                 statuses[
@@ -236,6 +294,7 @@ export default function Index({ rooms }) {
                                                     تعمیر
                                                 </button>
 
+
                                             ) : (
 
                                                 <button
@@ -257,6 +316,25 @@ export default function Index({ rooms }) {
                                                 </button>
 
                                             )}
+
+                                            <Link
+                                                href={`/admin/rooms/${room.id}/edit`}
+                                                className="flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-700"
+                                            >
+                                                <Pencil size={15} />
+
+                                                ویرایش
+                                            </Link>
+
+
+                                            <button
+                                                onClick={() => deleteRoom(room)}
+                                                className="flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+                                            >
+                                                <Trash2 size={15} />
+
+                                                حذف
+                                            </button>
 
                                         </div>
 
