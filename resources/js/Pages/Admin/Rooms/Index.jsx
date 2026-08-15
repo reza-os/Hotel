@@ -101,11 +101,11 @@ export default function Index({ rooms }) {
     };
 
     const filteredRooms =
-    filter === 'all'
-        ? rooms
-        : rooms.filter(
-            (room) => room.current_status === filter
-        );
+        filter === 'all'
+            ? rooms
+            : rooms.filter(
+                (room) => room.current_status === filter
+            );
 
 
     return (
@@ -137,35 +137,35 @@ export default function Index({ rooms }) {
 
             </div>
 
-            
-                        <div className="mb-4 flex flex-wrap gap-2">
-                            {[
-                                ['all', 'همه'],
-                                ['available', 'خالی'],
-                                ['occupied', 'اشغال'],
-                                ['pending', 'در انتظار رزرو'],
-                                ['maintenance', 'در تعمیر'],
-                                ['inactive', 'غیرفعال'],
-                            ].map(([value, label]) => (
-                                <button
-                                    key={value}
-                                    onClick={() => setFilter(value)}
-                                    className={`rounded-xl px-4 py-2 text-sm ${filter === value
-                                            ? 'bg-slate-950 text-white'
-                                            : 'border bg-white text-slate-600'
-                                        }`}
-                                >
-                                    {label}
-                                </button>
-                            ))}
-                        </div>
+
+            <div className="mb-4 flex flex-wrap gap-2">
+                {[
+                    ['all', 'همه'],
+                    ['available', 'خالی'],
+                    ['occupied', 'اشغال'],
+                    ['pending', 'در انتظار رزرو'],
+                    ['maintenance', 'در تعمیر'],
+                    ['inactive', 'غیرفعال'],
+                ].map(([value, label]) => (
+                    <button
+                        key={value}
+                        onClick={() => setFilter(value)}
+                        className={`rounded-xl px-4 py-2 text-sm ${filter === value
+                            ? 'bg-slate-950 text-white'
+                            : 'border bg-white text-slate-600'
+                            }`}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
 
 
-                        {errors?.room && (
-                            <div className="mb-5 rounded-xl bg-red-100 p-4 text-sm text-red-700">
-                                {errors.room}
-                            </div>
-                        )}
+            {errors?.room && (
+                <div className="mb-5 rounded-xl bg-red-100 p-4 text-sm text-red-700">
+                    {errors.room}
+                </div>
+            )}
 
 
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
@@ -201,10 +201,13 @@ export default function Index({ rooms }) {
                             <th className="p-4">
                                 عملیات
                             </th>
+                            <th className="p-4">
+                                تصویر
+                            </th>
                         </tr>
                     </thead>
 
-                    
+
 
 
 
@@ -348,6 +351,26 @@ export default function Index({ rooms }) {
                                             </button>
 
                                         </div>
+
+                                    </td>
+
+                                    <td className="p-4">
+
+                                        {room.image ? (
+
+                                            <img
+                                                src={`/storage/${room.image}`}
+                                                alt={room.title}
+                                                className="h-16 w-24 rounded-xl object-cover"
+                                            />
+
+                                        ) : (
+
+                                            <div className="flex h-16 w-24 items-center justify-center rounded-xl bg-slate-100 text-xs text-slate-400">
+                                                بدون تصویر
+                                            </div>
+
+                                        )}
 
                                     </td>
 

@@ -4,6 +4,16 @@ import { ArrowRight, Save } from 'lucide-react';
 
 export default function Create() {
 
+    const amenitiesList = [
+        'wifi',
+        'tv',
+        'air_conditioner',
+        'minibar',
+        'private_bathroom',
+        'breakfast',
+    ];
+
+
     const {
         data,
         setData,
@@ -17,6 +27,8 @@ export default function Create() {
         capacity: 1,
         price: '',
         description: '',
+        image: null,
+        amenities: [],
     });
 
 
@@ -91,6 +103,61 @@ export default function Create() {
                                 {errors.room_number}
                             </p>
                         )}
+                    </div>
+
+
+
+                    <div className="md:col-span-2">
+
+                        <label className="mb-3 block text-sm font-bold text-slate-700">
+                            امکانات اتاق
+                        </label>
+
+                        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+
+                            {[
+                                ['wifi', 'وای‌فای'],
+                                ['tv', 'تلویزیون'],
+                                ['air_conditioner', 'کولر'],
+                                ['minibar', 'مینی‌بار'],
+                                ['private_bathroom', 'حمام اختصاصی'],
+                                ['breakfast', 'صبحانه'],
+                            ].map(([value, label]) => (
+
+                                <label
+                                    key={value}
+                                    className="flex cursor-pointer items-center gap-2 rounded-xl border p-3"
+                                >
+
+                                    <input
+                                        type="checkbox"
+                                        checked={data.amenities.includes(value)}
+                                        onChange={(e) => {
+
+                                            if (e.target.checked) {
+                                                setData(
+                                                    'amenities',
+                                                    [...data.amenities, value]
+                                                );
+                                            } else {
+                                                setData(
+                                                    'amenities',
+                                                    data.amenities.filter(
+                                                        (item) => item !== value
+                                                    )
+                                                );
+                                            }
+
+                                        }}
+                                    />
+
+                                    {label}
+
+                                </label>
+                            ))}
+
+                        </div>
+
                     </div>
 
 
@@ -256,6 +323,31 @@ export default function Create() {
 
                     </div>
 
+                </div>
+
+
+                <div className="md:col-span-2">
+                    <label className="mb-2 block text-sm font-bold text-slate-700">
+                        تصویر اتاق
+                    </label>
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                            setData(
+                                'image',
+                                e.target.files[0]
+                            )
+                        }
+                        className="w-full rounded-xl border border-slate-300 p-3"
+                    />
+
+                    {errors.image && (
+                        <p className="mt-2 text-sm text-red-600">
+                            {errors.image}
+                        </p>
+                    )}
                 </div>
 
 
