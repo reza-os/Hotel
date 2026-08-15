@@ -101,7 +101,7 @@ class RoomController extends Controller
     {
         return Inertia::render('Admin/Rooms/Create');
     }
-    
+
     public function edit(Room $room)
     {
         return Inertia::render('Admin/Rooms/Edit', [
@@ -126,8 +126,6 @@ class RoomController extends Controller
             'اتاق با موفقیت بروزرسانی شد.'
         );
     }
-
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -148,4 +146,22 @@ class RoomController extends Controller
 
     }
     
+    public function destroy(Room $room)
+{
+    if ($room->reservations()->exists()) {
+        return back()->withErrors([
+            'room' => 'این اتاق دارای سابقه رزرو است و نمی‌توان آن را حذف کرد. می‌توانید آن را غیرفعال کنید.',
+        ]);
+    }
+
+    $room->delete();
+
+    return back()->with(
+        'success',
+        'اتاق با موفقیت حذف شد.'
+    );
+}
+    
+    
+
 }
