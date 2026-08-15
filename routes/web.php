@@ -31,6 +31,7 @@ Route::middleware(['auth',])->group(function () {
         Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::resource('/admin/rooms', RoomController::class);
         Route::resource('/admin/reservations', ReservationController::class);
+        
     });
 
     Route::get('/dashboard', function () {
