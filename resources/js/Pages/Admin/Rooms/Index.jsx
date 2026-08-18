@@ -142,34 +142,7 @@ export default function Index({ rooms }) {
 
 
 
-            <div className="mb-4 flex flex-wrap gap-2">
-                {[
-                    ['all', 'همه'],
-                    ['available', 'خالی'],
-                    ['occupied', 'اشغال'],
-                    ['pending', 'در انتظار رزرو'],
-                    ['maintenance', 'در تعمیر'],
-                    ['inactive', 'غیرفعال'],
-                ].map(([value, label]) => (
-                    <button
-                        key={value}
-                        onClick={() => setFilter(value)}
-                        className={`rounded-xl px-4 py-2 text-sm ${filter === value
-                            ? 'bg-slate-950 text-white'
-                            : 'border bg-white text-slate-600'
-                            }`}
-                    >
-                        {label}
-                    </button>
-                ))}
-            </div>
 
-
-            {errors?.room && (
-                <div className="mb-5 rounded-xl bg-red-100 p-4 text-sm text-red-700">
-                    {errors.room}
-                </div>
-            )}
 
 
             <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
