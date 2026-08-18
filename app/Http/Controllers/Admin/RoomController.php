@@ -77,8 +77,6 @@ class RoomController extends Controller
             'وضعیت اتاق با موفقیت تغییر کرد.'
         );
     }
-
-
     public function updateOperationalStatus(
         Request $request,
         Room $room
@@ -108,6 +106,7 @@ class RoomController extends Controller
             'room' => $room,
         ]);
     }
+    
     public function update(Request $request, Room $room)
     {
         $validated = $request->validate([
