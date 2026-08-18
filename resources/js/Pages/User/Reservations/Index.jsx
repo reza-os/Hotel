@@ -1,7 +1,11 @@
 import {
     Head,
     Link,
+    router,
+    usePage,
 } from '@inertiajs/react';
+
+import { X } from 'lucide-react';
 
 
 const statusLabels = {
@@ -16,6 +20,25 @@ const statusLabels = {
 export default function Index({
     reservations = [],
 }) {
+
+
+    const { errors } = usePage().props;
+
+    const cancelReservation = (reservation) => {
+        if (!confirm('آیا از لغو این رزرو مطمئن هستید؟')) {
+            return;
+        }
+
+        router.patch(
+            `/my-reservations/${reservation.id}/cancel`,
+            {},
+            {
+                preserveScroll: true,
+            }
+        );
+    };
+
+
     return (
         <>
             <Head title="رزروهای من" />
@@ -49,6 +72,13 @@ export default function Index({
                     </div>
 
 
+                    {errors?.reservation && (
+                        <div className="mb-5 rounded-xl bg-red-100 p-4 text-sm text-red-700">
+                            {errors.reservation}
+                        </div>
+                    )}
+
+
                     <div className="overflow-hidden rounded-2xl bg-white">
 
                         <table className="w-full text-right">
@@ -73,6 +103,10 @@ export default function Index({
 
                                     <th className="p-4">
                                         وضعیت
+                                    </th>
+
+                                    <th className="p-4">
+                                        عملیات
                                     </th>
                                 </tr>
                             </thead>
@@ -114,9 +148,28 @@ export default function Index({
                                             </td>
 
                                             <td className="p-4 font-bold">
-                                                {statusLabels[
-                                                    reservation.status
-                                                ]}
+                                                {statusLabels[reservation.status] ?? 'نامشخص'}
+                                            </td>
+
+                                            <td className="p-4">
+
+                                                {reservation.can_cancel ? (
+                                                    <button
+                                                        onClick={() =>
+                                                            cancelReservation(reservation)
+                                                        }
+                                                        className="flex items-center gap-1 rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600"
+                                                    >
+                                                        <X size={15} />
+
+                                                        لغو رزرو
+                                                    </button>
+                                                ) : (
+                                                    <span className="text-xs text-slate-400">
+                                                        -
+                                                    </span>
+                                                )}
+
                                             </td>
 
                                         </tr>
