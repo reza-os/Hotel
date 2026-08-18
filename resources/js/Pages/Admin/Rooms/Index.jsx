@@ -101,11 +101,12 @@ export default function Index({ rooms }) {
     };
 
     const filteredRooms =
-        filter === 'all'
-            ? rooms
-            : rooms.filter(
-                (room) => room.current_status === filter
-            );
+    filter === 'all'
+        ? rooms
+        : rooms.filter(
+            (room) => room.current_status === filter
+        );
+
 
 
     return (
@@ -136,6 +137,9 @@ export default function Index({ rooms }) {
                 </Link>
 
             </div>
+
+            
+
 
 
             <div className="mb-4 flex flex-wrap gap-2">
@@ -206,6 +210,9 @@ export default function Index({ rooms }) {
                             </th>
                         </tr>
                     </thead>
+
+                    
+
 
 
 
