@@ -13,12 +13,40 @@ use Inertia\Inertia;
 
 class UserReservationController extends Controller
 {
+    /*
+    |--------------------------------------------------------------------------
+    | رزروهای کاربر
+    |--------------------------------------------------------------------------
+    */
+
     public function index(Request $request)
     {
         $reservations = Reservation::with('room')
-            ->where('user_id', $request->user()->id)
+            ->where(
+                'user_id',
+                $request->user()->id
+            )
             ->latest()
-            ->get();
+            ->get()
+            ->map(function ($reservation) {
+
+                /*
+                 * فقط رزرو pending یا confirmed
+                 * که تاریخ ورودش نرسیده، قابل لغو است.
+                 */
+
+                $reservation->can_cancel =
+                    in_array(
+                        $reservation->status,
+                        ['pending', 'confirmed']
+                    )
+                    &&
+                    Carbon::parse(
+                        $reservation->check_in
+                    )->gt(today());
+
+                return $reservation;
+            });
 
         return Inertia::render(
             'User/Reservations/Index',
@@ -28,6 +56,12 @@ class UserReservationController extends Controller
         );
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | ثبت رزرو
+    |--------------------------------------------------------------------------
+    */
 
     public function store(Request $request)
     {
@@ -56,7 +90,6 @@ class UserReservationController extends Controller
             ],
         ]);
 
-
         DB::transaction(function () use (
             $request,
             $validated
@@ -64,7 +97,7 @@ class UserReservationController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | اتاق را قفل می‌کنیم
+            | قفل اتاق برای جلوگیری از رزرو هم‌زمان
             |--------------------------------------------------------------------------
             */
 
@@ -99,7 +132,10 @@ class UserReservationController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            if ($validated['guests'] > $room->capacity) {
+            if (
+                $validated['guests'] >
+                $room->capacity
+            ) {
                 throw ValidationException::withMessages([
                     'guests' =>
                         'تعداد مهمانان بیشتر از ظرفیت اتاق است.',
@@ -109,7 +145,7 @@ class UserReservationController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | بررسی تداخل رزرو
+            | بررسی تداخل زمانی
             |--------------------------------------------------------------------------
             */
 
@@ -119,10 +155,7 @@ class UserReservationController extends Controller
             )
                 ->whereIn(
                     'status',
-                    [
-                        'pending',
-                        'confirmed',
-                    ]
+                    ['pending', 'confirmed']
                 )
                 ->where(
                     'check_in',
@@ -135,7 +168,6 @@ class UserReservationController extends Controller
                     $validated['check_in']
                 )
                 ->exists();
-
 
             if ($conflict) {
                 throw ValidationException::withMessages([
@@ -166,7 +198,7 @@ class UserReservationController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | قیمت را در Backend حساب می‌کنیم
+            | محاسبه قیمت نهایی در Backend
             |--------------------------------------------------------------------------
             */
 
@@ -176,7 +208,7 @@ class UserReservationController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | ثبت رزرو
+            | ایجاد رزرو
             |--------------------------------------------------------------------------
             */
 
@@ -203,11 +235,82 @@ class UserReservationController extends Controller
                     'pending',
             ]);
         });
+
+
         return redirect()
             ->route('reservations.index')
             ->with(
                 'success',
                 'درخواست رزرو شما ثبت شد و منتظر تایید مدیر است.'
             );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | لغو رزرو
+    |--------------------------------------------------------------------------
+    */
+
+    public function cancel(
+        Request $request,
+        Reservation $reservation
+    ) {
+
+        /*
+         * کاربر نباید بتواند رزرو کاربر دیگر
+         * را با تغییر ID در URL لغو کند.
+         */
+
+        if (
+            $reservation->user_id !==
+            $request->user()->id
+        ) {
+            abort(403);
+        }
+
+
+        /*
+         * فقط pending و confirmed قابل لغو هستند.
+         */
+
+        if (
+            !in_array(
+                $reservation->status,
+                ['pending', 'confirmed']
+            )
+        ) {
+            return back()->withErrors([
+                'reservation' =>
+                    'این رزرو قابل لغو نیست.',
+            ]);
+        }
+
+
+        /*
+         * بعد از رسیدن تاریخ ورود لغو ممنوع است.
+         */
+
+        if (
+            Carbon::parse(
+                $reservation->check_in
+            )->lte(today())
+        ) {
+            return back()->withErrors([
+                'reservation' =>
+                    'در تاریخ ورود یا بعد از آن امکان لغو رزرو وجود ندارد.',
+            ]);
+        }
+
+
+        $reservation->update([
+            'status' => 'cancelled',
+        ]);
+
+
+        return back()->with(
+            'success',
+            'رزرو با موفقیت لغو شد.'
+        );
     }
 }

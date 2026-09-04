@@ -1,346 +1,1783 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Head, Link, router } from "@inertiajs/react";
+
 import {
-  Search, Calendar, Users, Wifi, Coffee, Waves, Utensils, Car,
-  Star, MapPin, Phone, Mail, ChevronLeft, ShieldCheck, BedDouble,
-  Sun, Moon, LogIn, UserPlus,
-} from "lucide-react";
-import { Link } from '@inertiajs/react';
+    FaArrowLeft,
+    FaBed,
+    FaCalendarAlt,
+    FaCar,
+    FaCoffee,
+    FaConciergeBell,
+    FaEnvelope,
+    FaMapMarkerAlt,
+    FaParking,
+    FaPhoneAlt,
+    FaQuoteRight,
+    FaStar,
+    FaSwimmingPool,
+    FaUser,
+    FaUsers,
+    FaUtensils,
+    FaWifi,
+} from "react-icons/fa";
 
-// ---------- Theme tokens (light is default; dark is ready to extend) ----------
-const THEMES = {
-  light: {
-    bg: "#F6F8F7",
-    surface: "#FFFFFF",
-    surfaceAlt: "#EFF4F2",
-    border: "#DCE6E3",
-    text: "#12302E",
-    textMuted: "#5C7472",
-    gold: "#B9862F",
-    goldSoft: "#F1E4C8",
-    teal: "#2E8B84",
-    shadow: "0 20px 45px -25px rgba(18,48,46,0.25)",
-  },
-  dark: {
-    bg: "#0F2B2E",
-    surface: "#16393D",
-    surfaceAlt: "#123336",
-    border: "#2C5C61",
-    text: "#F4EFE3",
-    textMuted: "#8FA6A5",
-    gold: "#CBA135",
-    goldSoft: "#2A2314",
-    teal: "#3FA9A0",
-    shadow: "0 20px 45px -25px rgba(0,0,0,0.5)",
-  },
-};
+import Navbar from "@/Components/Home/Navbar";
+import Footer from "@/Components/Home/Footer";
 
-const ROOMS = [
-  { id: 1, name: "اتاق دولوکس رو به باغ", price: "۲٬۸۵۰٬۰۰۰", guests: 2, size: 28, status: "available", tags: ["تخت کینگ", "بالکن", "صبحانه رایگان"] },
-  { id: 2, name: "سوئیت خانوادگی", price: "۴٬۲۰۰٬۰۰۰", guests: 4, size: 42, status: "booked", tags: ["دو اتاق‌خواب", "آشپزخانه کوچک", "نشیمن"] },
-  { id: 3, name: "اتاق استاندارد", price: "۱٬۹۵۰٬۰۰۰", guests: 2, size: 20, status: "available", tags: ["تخت دو نفره", "میز کار"] },
-  { id: 4, name: "سوئیت رویال", price: "۶٬۷۰۰٬۰۰۰", guests: 3, size: 55, status: "maintenance", tags: ["جکوزی", "چشم‌انداز شهر", "پذیرایی VIP"] },
-];
 
-function statusMap(theme) {
-  return {
-    available: { label: "خالی", color: theme.teal },
-    booked: { label: "رزرو شده", color: theme.gold },
-    maintenance: { label: "در حال تعمیر", color: "#C4593D" },
-  };
+export default function Home({
+    hotel = null,
+    featuredRooms = [],
+    facilities = [],
+    testimonials = [],
+}) {
+    /*
+    |--------------------------------------------------------------------------
+    | اطلاعات موقت
+    |--------------------------------------------------------------------------
+    |
+    | بعداً این اطلاعات از Laravel دریافت می‌شوند.
+    | اگر بک‌اند اطلاعات ارسال کند، اطلاعات بک‌اند استفاده می‌شود.
+    |
+    */
+
+    const hotelData = hotel ?? {
+        name: "هتل آریا",
+        english_name: "ARIA HOTEL",
+
+        phone: "09392738068",
+        email: "info@ariahotel.ir",
+
+        address: "تهران، خیابان ولیعصر، هتل آریا",
+
+        description:
+            "هتل آریا با محیطی آرام، طراحی مدرن و امکانات رفاهی کامل، تجربه‌ای متفاوت از اقامت را برای مهمانان خود فراهم می‌کند.",
+
+        short_description:
+            "ترکیبی از آرامش، کیفیت و مهمان‌نوازی برای ساختن اقامتی خاطره‌انگیز.",
+
+        hero_image: "/pictures/hotel-banner.jpg",
+
+        about_image: "/pictures/about-hotel.jpg",
+    };
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | اتاق‌های موقت
+    |--------------------------------------------------------------------------
+    */
+
+    const roomData =
+        featuredRooms.length > 0
+            ? featuredRooms
+            : [
+                  {
+                      id: 1,
+                      title: "اتاق استاندارد",
+                      type: "standard",
+
+                      price: 2500000,
+
+                      capacity: 2,
+
+                      image: "/pictures/rooms/room-1.jpg",
+
+                      description:
+                          "اتاقی آرام و مدرن مناسب اقامت دو نفر، مجهز به تمامی امکانات مورد نیاز.",
+
+                      features: [
+                          "اینترنت رایگان",
+                          "صبحانه",
+                          "تلویزیون",
+                      ],
+                  },
+
+                  {
+                      id: 2,
+                      title: "اتاق دلوکس",
+                      type: "deluxe",
+
+                      price: 3900000,
+
+                      capacity: 3,
+
+                      image: "/pictures/rooms/room-2.jpg",
+
+                      description:
+                          "اتاق دلوکس با فضای بزرگ‌تر، طراحی لوکس و چشم‌اندازی زیبا برای اقامتی خاص.",
+
+                      features: [
+                          "اینترنت رایگان",
+                          "صبحانه",
+                          "مینی بار",
+                      ],
+                  },
+
+                  {
+                      id: 3,
+                      title: "سوئیت رویال",
+                      type: "suite",
+
+                      price: 5900000,
+
+                      capacity: 4,
+
+                      image: "/pictures/rooms/room-3.jpg",
+
+                      description:
+                          "سوئیتی مجلل و بزرگ برای مهمانانی که به دنبال بالاترین سطح آسایش هستند.",
+
+                      features: [
+                          "صبحانه",
+                          "جکوزی",
+                          "مینی بار",
+                      ],
+                  },
+              ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | امکانات موقت
+    |--------------------------------------------------------------------------
+    */
+
+    const facilityData =
+        facilities.length > 0
+            ? facilities
+            : [
+                  {
+                      id: 1,
+                      title: "اینترنت رایگان",
+                      description:
+                          "اینترنت پرسرعت در اتاق‌ها و بخش‌های عمومی هتل.",
+
+                      icon: "wifi",
+                  },
+
+                  {
+                      id: 2,
+                      title: "رستوران",
+                      description:
+                          "رستوران با منوی متنوع غذاهای ایرانی و بین‌المللی.",
+
+                      icon: "restaurant",
+                  },
+
+                  {
+                      id: 3,
+                      title: "پارکینگ اختصاصی",
+                      description:
+                          "پارکینگ امن و اختصاصی برای مهمانان هتل.",
+
+                      icon: "parking",
+                  },
+
+                  {
+                      id: 4,
+                      title: "خدمات ۲۴ ساعته",
+                      description:
+                          "پاسخگویی و خدمات‌رسانی در تمام ساعات شبانه‌روز.",
+
+                      icon: "service",
+                  },
+
+                  {
+                      id: 5,
+                      title: "استخر",
+                      description:
+                          "فضای آرام و مجهز برای استراحت و تفریح مهمانان.",
+
+                      icon: "pool",
+                  },
+
+                  {
+                      id: 6,
+                      title: "صبحانه",
+                      description:
+                          "صبحانه متنوع و تازه برای شروع یک روز عالی.",
+
+                      icon: "breakfast",
+                  },
+              ];
+
+
+    const testimonialData =
+        testimonials.length > 0
+            ? testimonials
+            : [
+                  {
+                      id: 1,
+                      name: "علی رضایی",
+
+                      comment:
+                          "محیط هتل بسیار آرام و تمیز بود و برخورد کارکنان واقعاً عالی بود.",
+
+                      rating: 5,
+                  },
+
+                  {
+                      id: 2,
+                      name: "سارا احمدی",
+
+                      comment:
+                          "اتاق دلوکس بسیار زیبا بود و کیفیت خدمات از چیزی که انتظار داشتم بهتر بود.",
+
+                      rating: 5,
+                  },
+
+                  {
+                      id: 3,
+                      name: "محمد کریمی",
+
+                      comment:
+                          "دسترسی مناسب، محیط تمیز و صبحانه خوب. تجربه اقامت بسیار رضایت‌بخشی بود.",
+
+                      rating: 4,
+                  },
+              ];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | فرم جستجوی اتاق
+    |--------------------------------------------------------------------------
+    */
+
+    const [filters, setFilters] = useState({
+        check_in: "",
+        check_out: "",
+        guests: 1,
+        room_type: "",
+    });
+
+
+    const handleFilterChange = (event) => {
+        const { name, value } = event.target;
+
+        setFilters((previous) => ({
+            ...previous,
+            [name]: value,
+        }));
+    };
+
+
+    const searchRooms = (event) => {
+        event.preventDefault();
+
+        /*
+         * بعداً این اطلاعات به Laravel ارسال می‌شوند:
+         *
+         * /rooms?check_in=...&check_out=...
+         */
+
+        router.get("/rooms", filters);
+    };
+
+
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat("fa-IR").format(price);
+    };
+
+
+    return (
+        <>
+            <Head title={hotelData.name} />
+
+
+            <main
+                dir="rtl"
+                className="bg-white text-gray-900"
+            >
+
+                {/* =====================================
+                    HERO
+                ====================================== */}
+
+                <section className="relative min-h-[780px]">
+
+                    <img
+                        src={hotelData.hero_image}
+                        alt={hotelData.name}
+                        className="
+                            absolute
+                            inset-0
+                            h-full
+                            w-full
+                            object-cover
+                        "
+                    />
+
+
+                    <div
+                        className="
+                            absolute
+                            inset-0
+                            bg-gradient-to-l
+                            from-black/75
+                            via-black/45
+                            to-black/20
+                        "
+                    />
+
+
+                    <Navbar />
+
+
+                    <div
+                        className="
+                            relative
+                            z-10
+                            mx-auto
+                            flex
+                            min-h-[780px]
+                            max-w-7xl
+                            items-center
+                            px-6
+                            pt-28
+                            md:px-10
+                            lg:px-12
+                        "
+                    >
+
+                        <div className="max-w-2xl text-white">
+
+                            <span
+                                className="
+                                    mb-5
+                                    inline-block
+                                    text-sm
+                                    font-medium
+                                    tracking-wider
+                                    text-[#D4AF37]
+                                    md:text-base
+                                "
+                            >
+                                {hotelData.english_name}
+                            </span>
+
+
+                            <h1
+                                className="
+                                    mb-6
+                                    text-4xl
+                                    font-bold
+                                    leading-[1.6]
+                                    md:text-5xl
+                                    lg:text-6xl
+                                "
+                            >
+                                اقامتی متفاوت،
+                                <br />
+
+                                آرامشی ماندگار
+                            </h1>
+
+
+                            <p
+                                className="
+                                    mb-9
+                                    max-w-xl
+                                    text-base
+                                    leading-9
+                                    text-gray-200
+                                    md:text-lg
+                                "
+                            >
+                                {hotelData.short_description}
+                            </p>
+
+
+                            <div
+                                className="
+                                    flex
+                                    flex-wrap
+                                    gap-4
+                                "
+                            >
+
+                                <Link
+                                    href="/rooms"
+                                    className="
+                                        rounded-lg
+                                        bg-[#C9A227]
+                                        px-7
+                                        py-3.5
+                                        font-medium
+                                        text-white
+                                        transition
+                                        hover:bg-[#b69120]
+                                    "
+                                >
+                                    مشاهده اتاق‌ها
+                                </Link>
+
+
+                                <a
+                                    href="#about"
+                                    className="
+                                        rounded-lg
+                                        border
+                                        border-white/50
+                                        px-7
+                                        py-3.5
+                                        text-white
+                                        transition
+                                        hover:bg-white
+                                        hover:text-gray-900
+                                    "
+                                >
+                                    درباره هتل
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* Booking Search */}
+
+                    <div
+                        className="
+                            absolute
+                            bottom-0
+                            left-1/2
+                            z-20
+                            w-[92%]
+                            max-w-7xl
+                            -translate-x-1/2
+                            translate-y-1/2
+                        "
+                    >
+
+                        <form
+                            onSubmit={searchRooms}
+                            className="
+                                grid
+                                grid-cols-1
+                                gap-4
+                                rounded-2xl
+                                bg-white
+                                p-5
+                                shadow-2xl
+                                md:grid-cols-2
+                                lg:grid-cols-5
+                                lg:p-7
+                            "
+                        >
+
+                            <BookingField
+                                icon={<FaCalendarAlt />}
+                                label="تاریخ ورود"
+                            >
+
+                                <input
+                                    type="date"
+                                    name="check_in"
+                                    value={filters.check_in}
+                                    onChange={handleFilterChange}
+                                    className="booking-input"
+                                />
+
+                            </BookingField>
+
+
+                            <BookingField
+                                icon={<FaCalendarAlt />}
+                                label="تاریخ خروج"
+                            >
+
+                                <input
+                                    type="date"
+                                    name="check_out"
+                                    value={filters.check_out}
+                                    onChange={handleFilterChange}
+                                    className="booking-input"
+                                />
+
+                            </BookingField>
+
+
+                            <BookingField
+                                icon={<FaUsers />}
+                                label="تعداد مهمان"
+                            >
+
+                                <select
+                                    name="guests"
+                                    value={filters.guests}
+                                    onChange={handleFilterChange}
+                                    className="booking-input"
+                                >
+                                    <option value="1">۱ نفر</option>
+                                    <option value="2">۲ نفر</option>
+                                    <option value="3">۳ نفر</option>
+                                    <option value="4">۴ نفر</option>
+                                    <option value="5">۵ نفر</option>
+                                </select>
+
+                            </BookingField>
+
+
+                            <BookingField
+                                icon={<FaBed />}
+                                label="نوع اتاق"
+                            >
+
+                                <select
+                                    name="room_type"
+                                    value={filters.room_type}
+                                    onChange={handleFilterChange}
+                                    className="booking-input"
+                                >
+                                    <option value="">همه اتاق‌ها</option>
+                                    <option value="standard">
+                                        استاندارد
+                                    </option>
+
+                                    <option value="deluxe">
+                                        دلوکس
+                                    </option>
+
+                                    <option value="suite">
+                                        سوئیت
+                                    </option>
+                                </select>
+
+                            </BookingField>
+
+
+                            <button
+                                type="submit"
+                                className="
+                                    min-h-[74px]
+                                    rounded-xl
+                                    bg-[#C9A227]
+                                    px-6
+                                    font-bold
+                                    text-white
+                                    transition
+                                    hover:bg-[#b69120]
+                                "
+                            >
+                                جستجوی اتاق
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+
+                {/* =====================================
+                    ABOUT
+                ====================================== */}
+
+                <section
+                    id="about"
+                    className="
+                        mx-auto
+                        grid
+                        max-w-7xl
+                        grid-cols-1
+                        gap-12
+                        px-6
+                        pb-24
+                        pt-40
+                        md:px-10
+                        lg:grid-cols-2
+                        lg:items-center
+                        lg:px-12
+                    "
+                >
+
+                    <div className="relative">
+
+                        <img
+                            src={hotelData.about_image}
+                            alt={`درباره ${hotelData.name}`}
+                            className="
+                                h-[450px]
+                                w-full
+                                rounded-2xl
+                                object-cover
+                            "
+                        />
+
+
+                        <div
+                            className="
+                                absolute
+                                -bottom-6
+                                -left-3
+                                rounded-xl
+                                bg-[#C9A227]
+                                px-8
+                                py-6
+                                text-white
+                                shadow-lg
+                                md:left-8
+                            "
+                        >
+                            <strong className="block text-3xl">
+                                +۱۰
+                            </strong>
+
+                            <span className="text-sm">
+                                سال تجربه میزبانی
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <SectionTitle
+                            eyebrow="درباره هتل"
+                            title="مهمان‌نوازی در قلب هتل آریا"
+                        />
+
+
+                        <p
+                            className="
+                                mt-6
+                                leading-9
+                                text-gray-600
+                            "
+                        >
+                            {hotelData.description}
+                        </p>
+
+
+                        <p
+                            className="
+                                mt-4
+                                leading-9
+                                text-gray-600
+                            "
+                        >
+                            تلاش ما فراهم کردن محیطی آرام، امکانات
+                            مناسب و خدمات حرفه‌ای است تا اقامت شما
+                            به تجربه‌ای خاطره‌انگیز تبدیل شود.
+                        </p>
+
+
+                        <Link
+                            href="/about"
+                            className="
+                                mt-8
+                                inline-flex
+                                items-center
+                                gap-3
+                                font-medium
+                                text-[#A98518]
+                                transition
+                                hover:gap-4
+                            "
+                        >
+                            بیشتر درباره هتل
+
+                            <FaArrowLeft />
+
+                        </Link>
+
+                    </div>
+
+                </section>
+
+
+                {/* =====================================
+                    ROOMS
+                ====================================== */}
+
+                <section
+                    className="
+                        bg-[#F8F6F1]
+                        py-24
+                    "
+                >
+
+                    <div
+                        className="
+                            mx-auto
+                            max-w-7xl
+                            px-6
+                            md:px-10
+                            lg:px-12
+                        "
+                    >
+
+                        <SectionTitle
+                            centered
+                            eyebrow="اقامت در آریا"
+                            title="اتاق‌های منتخب هتل"
+                            description="اتاقی متناسب با نیاز خود انتخاب کنید و اقامتی آرام و راحت را تجربه کنید."
+                        />
+
+
+                        <div
+                            className="
+                                mt-12
+                                grid
+                                grid-cols-1
+                                gap-8
+                                md:grid-cols-2
+                                lg:grid-cols-3
+                            "
+                        >
+
+                            {roomData.map((room) => (
+
+                                <article
+                                    key={room.id}
+                                    className="
+                                        group
+                                        overflow-hidden
+                                        rounded-2xl
+                                        bg-white
+                                        shadow-sm
+                                        transition
+                                        duration-300
+                                        hover:-translate-y-2
+                                        hover:shadow-xl
+                                    "
+                                >
+
+                                    <div className="relative overflow-hidden">
+
+                                        <img
+                                            src={room.image}
+                                            alt={room.title}
+                                            className="
+                                                h-64
+                                                w-full
+                                                object-cover
+                                                transition
+                                                duration-500
+                                                group-hover:scale-105
+                                            "
+                                        />
+
+
+                                        <span
+                                            className="
+                                                absolute
+                                                right-4
+                                                top-4
+                                                rounded-full
+                                                bg-black/60
+                                                px-4
+                                                py-2
+                                                text-sm
+                                                text-white
+                                                backdrop-blur
+                                            "
+                                        >
+                                            ظرفیت {room.capacity} نفر
+                                        </span>
+
+                                    </div>
+
+
+                                    <div className="p-6">
+
+                                        <h3
+                                            className="
+                                                mb-3
+                                                text-xl
+                                                font-bold
+                                            "
+                                        >
+                                            {room.title}
+                                        </h3>
+
+
+                                        <p
+                                            className="
+                                                mb-5
+                                                min-h-[64px]
+                                                text-sm
+                                                leading-8
+                                                text-gray-600
+                                            "
+                                        >
+                                            {room.description}
+                                        </p>
+
+
+                                        <div
+                                            className="
+                                                mb-6
+                                                flex
+                                                flex-wrap
+                                                gap-2
+                                            "
+                                        >
+
+                                            {room.features?.map(
+                                                (feature) => (
+
+                                                    <span
+                                                        key={feature}
+                                                        className="
+                                                            rounded-full
+                                                            bg-gray-100
+                                                            px-3
+                                                            py-1.5
+                                                            text-xs
+                                                            text-gray-600
+                                                        "
+                                                    >
+                                                        {feature}
+                                                    </span>
+
+                                                )
+                                            )}
+
+                                        </div>
+
+
+                                        <div
+                                            className="
+                                                flex
+                                                items-end
+                                                justify-between
+                                                gap-4
+                                                border-t
+                                                border-gray-100
+                                                pt-5
+                                            "
+                                        >
+
+                                            <div>
+
+                                                <span className="text-xs text-gray-500">
+                                                    شروع قیمت از
+                                                </span>
+
+
+                                                <p
+                                                    className="
+                                                        mt-1
+                                                        font-bold
+                                                        text-[#A98518]
+                                                    "
+                                                >
+                                                    {formatPrice(
+                                                        room.price
+                                                    )}
+
+                                                    <span
+                                                        className="
+                                                            mr-1
+                                                            text-xs
+                                                            font-normal
+                                                        "
+                                                    >
+                                                        تومان / شب
+                                                    </span>
+
+                                                </p>
+
+                                            </div>
+
+
+                                            <Link
+                                                href={`/rooms/${room.id}`}
+                                                className="
+                                                    rounded-lg
+                                                    border
+                                                    border-[#C9A227]
+                                                    px-4
+                                                    py-2
+                                                    text-sm
+                                                    font-medium
+                                                    text-[#A98518]
+                                                    transition
+                                                    hover:bg-[#C9A227]
+                                                    hover:text-white
+                                                "
+                                            >
+                                                مشاهده اتاق
+                                            </Link>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            ))}
+
+                        </div>
+
+
+                        <div className="mt-12 text-center">
+
+                            <Link
+                                href="/rooms"
+                                className="
+                                    inline-flex
+                                    rounded-lg
+                                    bg-gray-900
+                                    px-8
+                                    py-3.5
+                                    font-medium
+                                    text-white
+                                    transition
+                                    hover:bg-[#C9A227]
+                                "
+                            >
+                                مشاهده همه اتاق‌ها
+                            </Link>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* =====================================
+                    FACILITIES
+                ====================================== */}
+
+                <section className="py-24">
+
+                    <div
+                        className="
+                            mx-auto
+                            max-w-7xl
+                            px-6
+                            md:px-10
+                            lg:px-12
+                        "
+                    >
+
+                        <SectionTitle
+                            centered
+                            eyebrow="امکانات هتل"
+                            title="هر آنچه برای یک اقامت راحت نیاز دارید"
+                            description="خدمات و امکانات هتل آریا برای فراهم کردن آرامش و آسایش مهمانان طراحی شده‌اند."
+                        />
+
+
+                        <div
+                            className="
+                                mt-14
+                                grid
+                                grid-cols-1
+                                gap-6
+                                sm:grid-cols-2
+                                lg:grid-cols-3
+                            "
+                        >
+
+                            {facilityData.map((facility) => (
+
+                                <div
+                                    key={facility.id}
+                                    className="
+                                        rounded-2xl
+                                        border
+                                        border-gray-100
+                                        p-7
+                                        transition
+                                        duration-300
+                                        hover:-translate-y-1
+                                        hover:border-[#C9A227]/40
+                                        hover:shadow-lg
+                                    "
+                                >
+
+                                    <div
+                                        className="
+                                            mb-5
+                                            flex
+                                            h-14
+                                            w-14
+                                            items-center
+                                            justify-center
+                                            rounded-xl
+                                            bg-[#F8F1D9]
+                                            text-2xl
+                                            text-[#A98518]
+                                        "
+                                    >
+                                        <FacilityIcon
+                                            type={facility.icon}
+                                        />
+                                    </div>
+
+
+                                    <h3 className="mb-3 text-lg font-bold">
+                                        {facility.title}
+                                    </h3>
+
+
+                                    <p className="leading-8 text-gray-600">
+                                        {facility.description}
+                                    </p>
+
+                                </div>
+
+                            ))}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* =====================================
+                    STATS
+                ====================================== */}
+
+                <section
+                    className="
+                        bg-gray-950
+                        py-16
+                        text-white
+                    "
+                >
+
+                    <div
+                        className="
+                            mx-auto
+                            grid
+                            max-w-7xl
+                            grid-cols-2
+                            gap-8
+                            px-6
+                            text-center
+                            md:grid-cols-4
+                            md:px-10
+                        "
+                    >
+
+                        <Stat number="+۳۰" label="اتاق و سوئیت" />
+
+                        <Stat number="+۱۰" label="سال تجربه" />
+
+                        <Stat number="+۵۰۰۰" label="مهمان راضی" />
+
+                        <Stat number="۲۴/۷" label="پشتیبانی" />
+
+                    </div>
+
+                </section>
+
+
+                {/* =====================================
+                    GALLERY
+                ====================================== */}
+
+                <section className="bg-[#F8F6F1] py-24">
+
+                    <div
+                        className="
+                            mx-auto
+                            max-w-7xl
+                            px-6
+                            md:px-10
+                            lg:px-12
+                        "
+                    >
+
+                        <SectionTitle
+                            centered
+                            eyebrow="گالری تصاویر"
+                            title="نگاهی به فضای هتل آریا"
+                        />
+
+
+                        <div
+                            className="
+                                mt-12
+                                grid
+                                grid-cols-2
+                                gap-4
+                                md:grid-cols-4
+                            "
+                        >
+
+                            {[
+                                "/pictures/gallery/gallery-1.jpg",
+                                "/pictures/gallery/gallery-2.jpg",
+                                "/pictures/gallery/gallery-3.jpg",
+                                "/pictures/gallery/gallery-4.jpg",
+                            ].map((image) => (
+
+                                <img
+                                    key={image}
+                                    src={image}
+                                    alt="گالری هتل آریا"
+                                    className="
+                                        h-56
+                                        w-full
+                                        rounded-xl
+                                        object-cover
+                                        transition
+                                        duration-300
+                                        hover:scale-[1.02]
+                                        md:h-72
+                                    "
+                                />
+
+                            ))}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* =====================================
+                    TESTIMONIAL
+                ====================================== */}
+
+                <section className="py-24">
+
+                    <div
+                        className="
+                            mx-auto
+                            max-w-7xl
+                            px-6
+                            md:px-10
+                            lg:px-12
+                        "
+                    >
+
+                        <SectionTitle
+                            centered
+                            eyebrow="نظر مهمانان"
+                            title="تجربه اقامت در هتل آریا"
+                        />
+
+
+                        <div
+                            className="
+                                mt-12
+                                grid
+                                grid-cols-1
+                                gap-7
+                                md:grid-cols-3
+                            "
+                        >
+
+                            {testimonialData.map((testimonial) => (
+
+                                <article
+                                    key={testimonial.id}
+                                    className="
+                                        rounded-2xl
+                                        border
+                                        border-gray-100
+                                        p-7
+                                        shadow-sm
+                                    "
+                                >
+
+                                    <FaQuoteRight
+                                        className="
+                                            mb-5
+                                            text-3xl
+                                            text-[#C9A227]
+                                        "
+                                    />
+
+
+                                    <p
+                                        className="
+                                            min-h-[100px]
+                                            leading-8
+                                            text-gray-600
+                                        "
+                                    >
+                                        {testimonial.comment}
+                                    </p>
+
+
+                                    <div
+                                        className="
+                                            mt-6
+                                            flex
+                                            items-center
+                                            justify-between
+                                            border-t
+                                            pt-5
+                                        "
+                                    >
+
+                                        <strong>
+                                            {testimonial.name}
+                                        </strong>
+
+
+                                        <div className="flex gap-1 text-[#C9A227]">
+
+                                            {Array.from(
+                                                {
+                                                    length:
+                                                        testimonial.rating,
+                                                },
+                                                (_, index) => (
+
+                                                    <FaStar key={index} />
+
+                                                )
+                                            )}
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            ))}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* =====================================
+                    CONTACT
+                ====================================== */}
+
+                <section
+                    id="contact"
+                    className="
+                        bg-gray-950
+                        py-24
+                        text-white
+                    "
+                >
+
+                    <div
+                        className="
+                            mx-auto
+                            grid
+                            max-w-7xl
+                            grid-cols-1
+                            gap-12
+                            px-6
+                            md:px-10
+                            lg:grid-cols-2
+                            lg:px-12
+                        "
+                    >
+
+                        <div>
+
+                            <span
+                                className="
+                                    mb-3
+                                    block
+                                    font-medium
+                                    text-[#C9A227]
+                                "
+                            >
+                                تماس با ما
+                            </span>
+
+
+                            <h2
+                                className="
+                                    mb-6
+                                    text-3xl
+                                    font-bold
+                                    md:text-4xl
+                                "
+                            >
+                                برای رزرو یا دریافت اطلاعات با ما
+                                در ارتباط باشید
+                            </h2>
+
+
+                            <p
+                                className="
+                                    mb-8
+                                    max-w-xl
+                                    leading-9
+                                    text-gray-400
+                                "
+                            >
+                                همکاران ما در تمام ساعات
+                                شبانه‌روز آماده پاسخگویی به
+                                سوالات شما هستند.
+                            </p>
+
+
+                            <ContactItem
+                                icon={<FaPhoneAlt />}
+                                title="شماره تماس"
+                                value={hotelData.phone}
+                                href={`tel:${hotelData.phone}`}
+                            />
+
+
+                            <ContactItem
+                                icon={<FaEnvelope />}
+                                title="ایمیل"
+                                value={hotelData.email}
+                                href={`mailto:${hotelData.email}`}
+                            />
+
+
+                            <ContactItem
+                                icon={<FaMapMarkerAlt />}
+                                title="آدرس"
+                                value={hotelData.address}
+                            />
+
+                        </div>
+
+
+                        <form
+                            className="
+                                rounded-2xl
+                                bg-white
+                                p-7
+                                text-gray-900
+                                md:p-9
+                            "
+                        >
+
+                            <h3
+                                className="
+                                    mb-7
+                                    text-2xl
+                                    font-bold
+                                "
+                            >
+                                ارسال پیام
+                            </h3>
+
+
+                            <div
+                                className="
+                                    grid
+                                    grid-cols-1
+                                    gap-5
+                                    md:grid-cols-2
+                                "
+                            >
+
+                                <ContactInput
+                                    label="نام و نام خانوادگی"
+                                    type="text"
+                                />
+
+                                <ContactInput
+                                    label="شماره تماس"
+                                    type="tel"
+                                />
+
+                            </div>
+
+
+                            <div className="mt-5">
+
+                                <ContactInput
+                                    label="ایمیل"
+                                    type="email"
+                                />
+
+                            </div>
+
+
+                            <div className="mt-5">
+
+                                <label
+                                    className="
+                                        mb-2
+                                        block
+                                        text-sm
+                                        font-medium
+                                    "
+                                >
+                                    پیام شما
+                                </label>
+
+                                <textarea
+                                    rows="5"
+                                    className="
+                                        w-full
+                                        resize-none
+                                        rounded-lg
+                                        border
+                                        border-gray-200
+                                        px-4
+                                        py-3
+                                        outline-none
+                                        transition
+                                        focus:border-[#C9A227]
+                                    "
+                                />
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                className="
+                                    mt-5
+                                    w-full
+                                    rounded-lg
+                                    bg-[#C9A227]
+                                    px-6
+                                    py-3.5
+                                    font-medium
+                                    text-white
+                                    transition
+                                    hover:bg-[#b69120]
+                                "
+                            >
+                                ارسال پیام
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </section>
+
+
+                {/* =====================================
+                    CTA
+                ====================================== */}
+
+                <section
+                    className="
+                        bg-[#C9A227]
+                        px-6
+                        py-14
+                        text-white
+                    "
+                >
+
+                    <div
+                        className="
+                            mx-auto
+                            flex
+                            max-w-7xl
+                            flex-col
+                            items-center
+                            justify-between
+                            gap-7
+                            text-center
+                            md:flex-row
+                            md:text-right
+                        "
+                    >
+
+                        <div>
+
+                            <h2 className="text-2xl font-bold md:text-3xl">
+                                برای یک اقامت خاطره‌انگیز آماده‌اید؟
+                            </h2>
+
+                            <p className="mt-3 text-white/80">
+                                همین حالا اتاق مناسب خود را پیدا کنید.
+                            </p>
+
+                        </div>
+
+
+                        <Link
+                            href="/rooms"
+                            className="
+                                rounded-lg
+                                bg-gray-950
+                                px-8
+                                py-3.5
+                                font-medium
+                                text-white
+                                transition
+                                hover:bg-gray-800
+                            "
+                        >
+                            رزرو اتاق
+                        </Link>
+
+                    </div>
+
+                </section>
+
+
+                <Footer hotel={hotelData} />
+
+            </main>
+        </>
+    );
 }
 
-const AMENITIES = [
-  { icon: Wifi, title: "اینترنت پرسرعت", desc: "در تمام فضاهای هتل" },
-  { icon: Coffee, title: "صبحانه کامل", desc: "هرروز از ساعت ۷ صبح" },
-  { icon: Waves, title: "استخر و اسپا", desc: "دسترسی ۲۴ ساعته" },
-  { icon: Utensils, title: "رستوران سنتی", desc: "منوی محلی و بین‌المللی" },
-  { icon: Car, title: "پارکینگ اختصاصی", desc: "رایگان برای مهمانان" },
-  { icon: ShieldCheck, title: "امنیت و نگهبانی", desc: "شبانه‌روزی" },
-];
 
-const REVIEWS = [
-  { name: "سارا احمدی", rating: 5, text: "برخورد پرسنل فوق‌العاده بود و اتاق دقیقاً همون چیزی بود که تو عکس‌ها دیدم." },
-  { name: "محمد رضایی", rating: 4, text: "موقعیت مکانی عالی، فقط صبحانه می‌تونست تنوع بیشتری داشته باشه." },
-  { name: "نگار حسینی", rating: 5, text: "برای اقامت خانوادگی بهترین انتخاب بود، بچه‌ها عاشق استخرش شدن." },
-];
 
-function FacadeIllustration({ theme }) {
-  const [lit, setLit] = useState(() => new Set([1, 4, 6, 9, 13, 16, 19, 22]));
+/*
+|--------------------------------------------------------------------------
+| Component های کوچک صفحه
+|--------------------------------------------------------------------------
+*/
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setLit((prev) => {
-        const next = new Set(prev);
-        const idx = Math.floor(Math.random() * 24);
-        next.has(idx) ? next.delete(idx) : next.add(idx);
-        return next;
-      });
-    }, 1400);
-    return () => clearInterval(id);
-  }, []);
 
-  // The facade itself always reads as a night scene (it's the signature
-  // element for "live room status") regardless of the page theme.
-  const cols = 6, rows = 4;
-  const windows = [];
-  let n = 0;
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      const x = 40 + c * 58, y = 60 + r * 58;
-      const on = lit.has(n);
-      windows.push(
-        <rect key={n} x={x} y={y} width="34" height="34" rx="3"
-          style={{ fill: on ? "#E7C468" : "#1C4A4F", opacity: on ? 1 : 0.55, transition: "fill 900ms ease, opacity 900ms ease" }} />
-      );
-      n++;
-    }
-  }
+function SectionTitle({
+    eyebrow,
+    title,
+    description,
+    centered = false,
+}) {
+    return (
+        <div
+            className={
+                centered
+                    ? "mx-auto max-w-2xl text-center"
+                    : "max-w-2xl"
+            }
+        >
 
-  return (
-    <svg viewBox="0 0 420 420" style={{ width: "100%", height: "100%" }}>
-      <defs>
-        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#0A1F22" />
-          <stop offset="100%" stopColor="#123336" />
-        </linearGradient>
-      </defs>
-      <rect x="0" y="0" width="420" height="420" fill="url(#skyGrad)" />
-      <circle cx="360" cy="55" r="26" fill="#F4EFE3" opacity="0.9" />
-      <circle cx="352" cy="48" r="26" fill="#0A1F22" />
-      {[...Array(18)].map((_, i) => (
-        <circle key={i} cx={(i * 53 + 20) % 400 + 10} cy={(i * 37) % 120 + 10} r="1.6" fill="#F4EFE3" opacity="0.5" />
-      ))}
-      <rect x="20" y="40" width="380" height="360" rx="6" fill="#123336" stroke="#2C5C61" strokeWidth="2" />
-      {windows}
-      <rect x="170" y="330" width="80" height="70" rx="4" fill="#0A1F22" />
-      <rect x="170" y="330" width="80" height="70" rx="4" fill="none" stroke={theme.gold} strokeWidth="2" />
-      <rect x="0" y="392" width="420" height="28" fill="#0A1F22" />
-    </svg>
-  );
+            <span
+                className="
+                    mb-3
+                    block
+                    font-medium
+                    text-[#A98518]
+                "
+            >
+                {eyebrow}
+            </span>
+
+
+            <h2
+                className="
+                    text-3xl
+                    font-bold
+                    leading-normal
+                    md:text-4xl
+                "
+            >
+                {title}
+            </h2>
+
+
+            {description && (
+
+                <p
+                    className="
+                        mt-5
+                        leading-8
+                        text-gray-600
+                    "
+                >
+                    {description}
+                </p>
+
+            )}
+
+        </div>
+    );
 }
 
-export default function HotelHomepage({ canLogin = true, canRegister = true } = {}) {
-  const [mode, setMode] = useState("light");
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(2);
 
-  const theme = THEMES[mode];
-  const STATUS_MAP = statusMap(theme);
 
-  return (
-    <div dir="rtl" style={{
-      fontFamily: "'Vazirmatn', sans-serif",
-      background: theme.bg, color: theme.text, minHeight: "100%",
-      transition: "background 300ms ease, color 300ms ease",
-    }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
-        * { box-sizing: border-box; }
-        .hh-btn { transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease; }
-        .hh-btn:hover { transform: translateY(-1px); }
-        .hh-card { transition: transform 200ms ease, border-color 200ms ease; }
-        .hh-card:hover { transform: translateY(-4px); }
-        .hh-input:focus { outline: none; }
-        .hh-theme-toggle { transition: background 160ms ease, border-color 160ms ease; }
-        @media (max-width: 860px) {
-          .hh-hero { grid-template-columns: 1fr !important; }
-          .hh-hero-art { display: none !important; }
-          .hh-auth-labels { display: none !important; }
-        }
-      `}</style>
+function BookingField({ icon, label, children }) {
+    return (
+        <div
+            className="
+                flex
+                min-h-[74px]
+                items-center
+                gap-4
+                rounded-xl
+                border
+                border-gray-200
+                px-4
+            "
+        >
 
-      {/* Header */}
-      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "22px 6%", borderBottom: `1px solid ${theme.border}` }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <BedDouble size={26} color={theme.gold} />
-          <span style={{ fontSize: 21, fontWeight: 800, letterSpacing: 0.5 }}>هتل مروارید</span>
+            <span className="text-xl text-[#C9A227]">
+                {icon}
+            </span>
+
+
+            <div className="min-w-0 flex-1">
+
+                <label
+                    className="
+                        mb-1
+                        block
+                        text-xs
+                        text-gray-500
+                    "
+                >
+                    {label}
+                </label>
+
+                {children}
+
+            </div>
+
         </div>
+    );
+}
 
-        <nav style={{ display: "flex", gap: 28, fontSize: 15, color: theme.textMuted }}>
-          <a href="#rooms" style={{ color: "inherit", textDecoration: "none" }}>اتاق‌ها</a>
-          <a href="#amenities" style={{ color: "inherit", textDecoration: "none" }}>امکانات</a>
-          <a href="#reviews" style={{ color: "inherit", textDecoration: "none" }}>نظرات</a>
-          <a href="#contact" style={{ color: "inherit", textDecoration: "none" }}>تماس</a>
-        </nav>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <button
-            aria-label={mode === "light" ? "فعال‌سازی حالت تیره" : "فعال‌سازی حالت روشن"}
-            onClick={() => setMode(mode === "light" ? "dark" : "light")}
-            className="hh-theme-toggle hh-btn"
-            style={{ width: 38, height: 38, borderRadius: 10, border: `1px solid ${theme.border}`, background: theme.surfaceAlt, color: theme.text, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
-          >
-            {mode === "light" ? <Moon size={16} /> : <Sun size={16} />}
-          </button>
 
-          {canLogin && (
-  <Link href="/login" className="hh-btn" style={{
-    background: "transparent", color: theme.text, border: `1px solid ${theme.border}`,
-    borderRadius: 8, padding: "9px 16px", fontWeight: 600, fontSize: 14,
-    fontFamily: "inherit", display: "flex", alignItems: "center", gap: 6,
-    textDecoration: "none",
-  }}>
-    <LogIn size={15} />
-    <span className="hh-auth-labels">ورود</span>
-  </Link>
-)}
+function FacilityIcon({ type }) {
+    const icons = {
+        wifi: <FaWifi />,
+        restaurant: <FaUtensils />,
+        parking: <FaParking />,
+        service: <FaConciergeBell />,
+        pool: <FaSwimmingPool />,
+        breakfast: <FaCoffee />,
+        car: <FaCar />,
+    };
 
-{canRegister && (
-  <Link href="/register" className="hh-btn" style={{
-    background: theme.gold, color: "#FFFFFF", border: "none",
-    borderRadius: 8, padding: "9px 16px", fontWeight: 700, fontSize: 14,
-    fontFamily: "inherit", display: "flex", alignItems: "center", gap: 6,
-    textDecoration: "none",
-  }}>
-    <UserPlus size={15} />
-    <span className="hh-auth-labels">ثبت‌نام</span>
-  </Link>
-)}
-        </div>
-      </header>
+    return icons[type] ?? <FaStar />;
+}
 
-      {/* Hero */}
-      <section className="hh-hero" style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 40, alignItems: "center", padding: "56px 6% 30px" }}>
+
+
+function Stat({ number, label }) {
+    return (
         <div>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: theme.surfaceAlt, border: `1px solid ${theme.border}`, borderRadius: 20, padding: "6px 14px", fontSize: 13, color: theme.teal, marginBottom: 22 }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: theme.teal, display: "inline-block" }} />
-            وضعیت اتاق‌ها به‌صورت لحظه‌ای به‌روزرسانی می‌شود
-          </div>
-          <h1 style={{ fontSize: 44, lineHeight: 1.35, fontWeight: 800, margin: "0 0 18px" }}>
-            اقامتی آرام، <span style={{ color: theme.gold }}>رزروی ساده</span>
-          </h1>
-          <p style={{ fontSize: 16, color: theme.textMuted, lineHeight: 1.9, maxWidth: 460, marginBottom: 34 }}>
-            اتاق خودتون رو بر اساس تاریخ سفر، تعداد مهمان و امکانات مورد نظر پیدا کنید و در چند ثانیه رزرو رو نهایی کنید.
-          </p>
 
-          {/* Search widget */}
-          <div style={{ background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: 16, padding: 20, display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 14, boxShadow: theme.shadow }}>
-            <label style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12, color: theme.textMuted }}>
-              تاریخ ورود
-              <div style={{ display: "flex", alignItems: "center", gap: 8, background: theme.surfaceAlt, border: `1px solid ${theme.border}`, borderRadius: 8, padding: "10px 12px" }}>
-                <Calendar size={16} color={theme.gold} />
-                <input className="hh-input" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} placeholder="۱۴۰۴/۰۵/۲۰"
-                  style={{ background: "transparent", border: "none", color: theme.text, fontFamily: "inherit", fontSize: 13, width: "100%" }} />
-              </div>
-            </label>
-            <label style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12, color: theme.textMuted }}>
-              تاریخ خروج
-              <div style={{ display: "flex", alignItems: "center", gap: 8, background: theme.surfaceAlt, border: `1px solid ${theme.border}`, borderRadius: 8, padding: "10px 12px" }}>
-                <Calendar size={16} color={theme.gold} />
-                <input className="hh-input" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} placeholder="۱۴۰۴/۰۵/۲۳"
-                  style={{ background: "transparent", border: "none", color: theme.text, fontFamily: "inherit", fontSize: 13, width: "100%" }} />
-              </div>
-            </label>
-            <label style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12, color: theme.textMuted }}>
-              مهمانان
-              <div style={{ display: "flex", alignItems: "center", gap: 8, background: theme.surfaceAlt, border: `1px solid ${theme.border}`, borderRadius: 8, padding: "10px 12px" }}>
-                <Users size={16} color={theme.gold} />
-                <input className="hh-input" type="number" min={1} value={guests} onChange={(e) => setGuests(e.target.value)}
-                  style={{ background: "transparent", border: "none", color: theme.text, fontFamily: "inherit", fontSize: 13, width: "100%" }} />
-              </div>
-            </label>
-            <button className="hh-btn" style={{ alignSelf: "end", background: theme.gold, border: "none", borderRadius: 8, color: "#FFFFFF", fontWeight: 700, fontSize: 14, padding: "0 22px", height: 40, display: "flex", alignItems: "center", gap: 6, cursor: "pointer", fontFamily: "inherit" }}>
-              <Search size={16} /> جستجو
-            </button>
-          </div>
+            <strong
+                className="
+                    block
+                    text-3xl
+                    text-[#C9A227]
+                    md:text-4xl
+                "
+            >
+                {number}
+            </strong>
+
+            <span
+                className="
+                    mt-2
+                    block
+                    text-sm
+                    text-gray-300
+                "
+            >
+                {label}
+            </span>
+
         </div>
+    );
+}
 
-        <div className="hh-hero-art" style={{ borderRadius: 20, overflow: "hidden", border: `1px solid ${theme.border}`, aspectRatio: "1", boxShadow: theme.shadow }}>
-          <FacadeIllustration theme={theme} />
-        </div>
-      </section>
 
-      {/* Amenities */}
-      <section id="amenities" style={{ padding: "70px 6%" }}>
-        <h2 style={{ fontSize: 26, fontWeight: 800, marginBottom: 8 }}>امکانات هتل</h2>
-        <p style={{ color: theme.textMuted, marginBottom: 34, fontSize: 14 }}>هرچیزی که برای یک اقامت راحت لازم دارید</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 18 }}>
-          {AMENITIES.map((a, i) => (
-            <div key={i} className="hh-card" style={{ background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: 14, padding: 20, boxShadow: theme.shadow }}>
-              <a.icon size={22} color={theme.teal} />
-              <div style={{ fontWeight: 700, fontSize: 15, margin: "12px 0 4px" }}>{a.title}</div>
-              <div style={{ fontSize: 13, color: theme.textMuted }}>{a.desc}</div>
+
+function ContactItem({
+    icon,
+    title,
+    value,
+    href,
+}) {
+    const content = (
+        <div
+            className="
+                flex
+                items-center
+                gap-4
+            "
+        >
+
+            <div
+                className="
+                    flex
+                    h-12
+                    w-12
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-lg
+                    bg-white/10
+                    text-[#C9A227]
+                "
+            >
+                {icon}
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Rooms */}
-      <section id="rooms" style={{ padding: "20px 6% 70px" }}>
-        <h2 style={{ fontSize: 26, fontWeight: 800, marginBottom: 8 }}>اتاق‌ها و سوئیت‌ها</h2>
-        <p style={{ color: theme.textMuted, marginBottom: 34, fontSize: 14 }}>وضعیت هر اتاق به‌صورت زنده نمایش داده می‌شود</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 20 }}>
-          {ROOMS.map((room) => {
-            const st = STATUS_MAP[room.status];
-            return (
-              <div key={room.id} className="hh-card" style={{ background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: 16, padding: 20, boxShadow: theme.shadow }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, color: st.color, background: `${st.color}1A`, padding: "4px 10px", borderRadius: 20 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: st.color, display: "inline-block" }} />
-                    {st.label}
-                  </div>
-                  <div style={{ fontSize: 12, color: theme.textMuted }}>{room.size} متر</div>
-                </div>
-                <div style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>{room.name}</div>
-                <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}>
-                  {room.tags.map((t, i) => (
-                    <span key={i} style={{ fontSize: 11, color: theme.textMuted, border: `1px solid ${theme.border}`, borderRadius: 12, padding: "3px 9px" }}>{t}</span>
-                  ))}
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: `1px solid ${theme.border}`, paddingTop: 14 }}>
-                  <div>
-                    <span style={{ fontSize: 18, fontWeight: 800, color: theme.gold }}>{room.price}</span>
-                    <span style={{ fontSize: 12, color: theme.textMuted }}> تومان / شب</span>
-                  </div>
-                  <button className="hh-btn" disabled={room.status !== "available"} style={{
-                    background: "transparent",
-                    border: `1px solid ${room.status === "available" ? theme.gold : theme.border}`,
-                    color: room.status === "available" ? theme.gold : theme.textMuted,
-                    borderRadius: 8, padding: "8px 14px", fontSize: 13, fontFamily: "inherit",
-                    cursor: room.status === "available" ? "pointer" : "not-allowed",
-                    display: "flex", alignItems: "center", gap: 4,
-                  }}>
-                    رزرو <ChevronLeft size={14} />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
 
-      {/* Reviews */}
-      <section id="reviews" style={{ padding: "20px 6% 70px" }}>
-        <h2 style={{ fontSize: 26, fontWeight: 800, marginBottom: 8 }}>نظر مهمانان</h2>
-        <p style={{ color: theme.textMuted, marginBottom: 34, fontSize: 14 }}>تجربه‌ی واقعی کسانی که اینجا اقامت داشتند</p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 18 }}>
-          {REVIEWS.map((r, i) => (
-            <div key={i} className="hh-card" style={{ background: theme.surface, border: `1px solid ${theme.border}`, borderRadius: 14, padding: 20, boxShadow: theme.shadow }}>
-              <div style={{ display: "flex", gap: 3, marginBottom: 12 }}>
-                {[...Array(5)].map((_, s) => (
-                  <Star key={s} size={14} color={theme.gold} fill={s < r.rating ? theme.gold : "none"} />
-                ))}
-              </div>
-              <p style={{ fontSize: 14, color: theme.text, lineHeight: 1.9, marginBottom: 14 }}>{r.text}</p>
-              <div style={{ fontSize: 13, fontWeight: 700 }}>{r.name}</div>
+            <div>
+
+                <span className="text-sm text-gray-400">
+                    {title}
+                </span>
+
+                <p className="mt-1">
+                    {value}
+                </p>
+
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer id="contact" style={{ borderTop: `1px solid ${theme.border}`, padding: "34px 6%", display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 20 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <BedDouble size={20} color={theme.gold} />
-          <span style={{ fontWeight: 700 }}>هتل مروارید</span>
         </div>
-        <div style={{ display: "flex", gap: 24, fontSize: 13, color: theme.textMuted }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}><MapPin size={14} /> تهران، خیابان ولیعصر</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}><Phone size={14} /> ۰۲۱-۱۲۳۴۵۶۷۸</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}><Mail size={14} /> info@morvarid-hotel.ir</div>
+    );
+
+
+    return (
+        <div className="mb-5">
+
+            {href ? (
+                <a href={href}>
+                    {content}
+                </a>
+            ) : (
+                content
+            )}
+
         </div>
-      </footer>
-    </div>
-  );
+    );
+}
+
+
+
+function ContactInput({ label, type }) {
+    return (
+        <div>
+
+            <label
+                className="
+                    mb-2
+                    block
+                    text-sm
+                    font-medium
+                "
+            >
+                {label}
+            </label>
+
+
+            <input
+                type={type}
+                className="
+                    w-full
+                    rounded-lg
+                    border
+                    border-gray-200
+                    px-4
+                    py-3
+                    outline-none
+                    transition
+                    focus:border-[#C9A227]
+                "
+            />
+
+        </div>
+    );
 }

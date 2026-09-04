@@ -37,8 +37,12 @@ class UserRoomController extends Controller
             ->where('is_active', true)
             ->where('operational_status', 'ready');
 
+        /*
+        |--------------------------------------------------------------------------
+        | فیلتر ظرفیت
+        |--------------------------------------------------------------------------
+        */
 
-        // فیلتر ظرفیت
         if (!empty($validated['guests'])) {
             $rooms->where(
                 'capacity',
@@ -47,8 +51,12 @@ class UserRoomController extends Controller
             );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | بررسی آزاد بودن اتاق در بازه تاریخی
+        |--------------------------------------------------------------------------
+        */
 
-        // فیلتر بر اساس تاریخ
         if (
             !empty($validated['check_in']) &&
             !empty($validated['check_out'])
@@ -56,7 +64,6 @@ class UserRoomController extends Controller
             $rooms->whereDoesntHave(
                 'reservations',
                 function ($query) use ($validated) {
-
                     $query
                         ->whereIn(
                             'status',
@@ -76,7 +83,6 @@ class UserRoomController extends Controller
             );
         }
 
-
         return Inertia::render(
             'User/Rooms/Index',
             [
@@ -93,6 +99,65 @@ class UserRoomController extends Controller
 
                     'guests' =>
                         $validated['guests'] ?? '',
+                ],
+            ]
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | جزئیات یک اتاق
+    |--------------------------------------------------------------------------
+    */
+
+    public function show(Request $request, Room $room)
+    {
+        /*
+         * اتاق غیرفعال یا در تعمیر نباید
+         * برای مشتری نمایش داده شود.
+         */
+        if (
+            !$room->is_active ||
+            $room->operational_status !== 'ready'
+        ) {
+            abort(404);
+        }
+
+        $validated = $request->validate([
+            'check_in' => [
+                'nullable',
+                'date',
+                'after_or_equal:today',
+            ],
+
+            'check_out' => [
+                'nullable',
+                'date',
+                'after:check_in',
+            ],
+
+            'guests' => [
+                'nullable',
+                'integer',
+                'min:1',
+            ],
+        ]);
+
+        return Inertia::render(
+            'User/Rooms/Show',
+            [
+                'room' => $room,
+
+                'booking' => [
+                    'check_in' =>
+                        $validated['check_in'] ?? '',
+
+                    'check_out' =>
+                        $validated['check_out'] ?? '',
+
+                    'guests' =>
+                        $validated['guests'] ?? 1,
                 ],
             ]
         );

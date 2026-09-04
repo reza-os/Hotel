@@ -1,0 +1,36 @@
+.input-box{
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    border:1px solid #ddd;
+
+    padding:15px;
+
+    border-radius:12px;
+
+}
+
+
+.input-box svg{
+
+    color:#C9A227;
+
+}
+
+
+.input-box span{
+
+    font-size:14px;
+    color:#777;
+
+}
+
+
+.input-box p{
+
+    margin-top:5px;
+    font-weight:600;
+
+}
