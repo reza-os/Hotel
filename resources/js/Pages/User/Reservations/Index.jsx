@@ -5,6 +5,8 @@ import {
     usePage,
 } from '@inertiajs/react';
 
+import UserLayout from '@/Layouts/UserLayout';
+
 import { X } from 'lucide-react';
 
 
@@ -39,14 +41,11 @@ export default function Index({
     };
 
 
-    return (
-        <>
+   return (
+    <UserLayout>
             <Head title="رزروهای من" />
 
-            <div
-                dir="rtl"
-                className="min-h-screen bg-slate-100 p-8"
-            >
+           
 
                 <div className="mx-auto max-w-6xl">
 
@@ -185,7 +184,7 @@ export default function Index({
 
                 </div>
 
-            </div>
-        </>
+            
+        </UserLayout>
     );
 }

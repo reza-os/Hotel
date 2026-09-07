@@ -1,20 +1,13 @@
 import React, { useState } from "react";
 
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
-import {
-    FaRegUser,
-    FaPhoneAlt,
-    FaBars,
-    FaTimes,
-} from "react-icons/fa";
-
+import { FaRegUser, FaPhoneAlt, FaBars, FaTimes } from "react-icons/fa";
 
 const hotelInfo = {
     name: "Aria Hotel",
     phone: "09392738068",
 };
-
 
 const menuItems = [
     {
@@ -44,16 +37,14 @@ const menuItems = [
     },
 ];
 
-
 export default function Navbar() {
-
-
     const [openMenu, setOpenMenu] = useState(false);
 
+    const { auth } = usePage().props;
 
+    const user = auth?.user;
 
     return (
-
         <nav
             dir="rtl"
             className="
@@ -73,12 +64,9 @@ export default function Navbar() {
             text-white
             "
         >
-
-
             {/* Logo */}
 
             <Link href="/">
-
                 <img
                     src="/pictures/logo.png"
                     alt={hotelInfo.name}
@@ -88,10 +76,7 @@ export default function Navbar() {
                     object-contain
                     "
                 />
-
             </Link>
-
-
 
             {/* Desktop Menu */}
 
@@ -103,15 +88,11 @@ export default function Navbar() {
                 gap-8
                 "
             >
-
-                {
-                    menuItems.map((item,index)=>(
-
-                        <Link
-                            key={index}
-                            href={item.href}
-
-                            className={`
+                {menuItems.map((item, index) => (
+                    <Link
+                        key={index}
+                        href={item.href}
+                        className={`
                             relative
                             text-sm
                             xl:text-base
@@ -119,25 +100,15 @@ export default function Navbar() {
                             transition
                             duration-300
 
-                            ${
-                                item.active
-                                ?
-                                "text-gold"
-                                :
-                                "hover:text-gold"
-                            }
+                            ${item.active ? "text-gold" : "hover:text-gold"}
 
                             `}
-                        >
+                    >
+                        {item.title}
 
-                            {item.title}
-
-
-                            {
-                                item.active &&
-
-                                <span
-                                    className="
+                        {item.active && (
+                            <span
+                                className="
                                     absolute
                                     -bottom-3
                                     right-0
@@ -145,21 +116,11 @@ export default function Navbar() {
                                     h-[2px]
                                     bg-gold
                                     "
-                                />
-
-                            }
-
-
-                        </Link>
-
-                    ))
-                }
-
+                            />
+                        )}
+                    </Link>
+                ))}
             </div>
-
-
-
-
 
             {/* Actions Desktop */}
 
@@ -171,30 +132,39 @@ export default function Navbar() {
                 gap-6
                 "
             >
+                {user ? (
+                    <div className="flex items-center gap-4">
+                        <Link
+                            href={
+                                user.is_admin
+                                    ? "/admin/dashboard"
+                                    : "/dashboard"
+                            }
+                        >
+                            {user.is_admin ? "پنل مدیریت" : "پنل کاربری"}
+                        </Link>
 
+                        <Link
+                            href="/logout"
+                            method="post"
+                            as="button"
+                            className="text-red-300"
+                        >
+                            خروج
+                        </Link>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-3">
+                        <Link href="/login">ورود</Link>
 
-                <Link
-                    href="/login"
-
-                    className="
-                    flex
-                    items-center
-                    gap-2
-                    hover:text-gold
-                    transition
-                    "
-                >
-
-                    <FaRegUser size={18}/>
-
-                    <span>
-                        ورود / ثبت نام
-                    </span>
-
-                </Link>
-
-
-
+                        <Link
+                            href="/register"
+                            className="rounded-lg bg-[#C9A227] px-4 py-2"
+                        >
+                            ثبت نام
+                        </Link>
+                    </div>
+                )}
 
                 <div
                     className="
@@ -203,59 +173,28 @@ export default function Navbar() {
                     gap-2
                     "
                 >
+                    <FaPhoneAlt size={17} />
 
-                    <FaPhoneAlt size={17}/>
-
-                    <span>
-                        {hotelInfo.phone}
-                    </span>
-
+                    <span>{hotelInfo.phone}</span>
                 </div>
-
-
             </div>
-
-
-
-
-
 
             {/* Mobile Button */}
 
-
             <button
-
                 onClick={() => setOpenMenu(!openMenu)}
-
                 className="
                 lg:hidden
                 text-xl
                 "
             >
-
-                {
-                    openMenu
-                    ?
-                    <FaTimes/>
-                    :
-                    <FaBars/>
-                }
-
-
+                {openMenu ? <FaTimes /> : <FaBars />}
             </button>
-
-
-
-
 
             {/* Mobile Menu */}
 
-
-            {
-                openMenu &&
-
+            {openMenu && (
                 <div
-
                     className="
                     absolute
                     top-24
@@ -269,50 +208,47 @@ export default function Navbar() {
                     lg:hidden
                     "
                 >
-
-
-                    {
-                        menuItems.map((item,index)=>(
-
-                            <Link
-
-                                key={index}
-
-                                href={item.href}
-
-                                className="
+                    {menuItems.map((item, index) => (
+                        <Link
+                            key={index}
+                            href={item.href}
+                            className="
                                 hover:text-gold
                                 transition
                                 "
-                            >
+                        >
+                            {item.title}
+                        </Link>
+                    ))}
 
-                                {item.title}
+                    <div className="flex flex-col gap-3">
+                        <a
+                            href="/login"
+                            className="
+            flex
+            items-center
+            gap-2
+        "
+                        >
+                            <FaRegUser />
+                            ورود
+                        </a>
 
-                            </Link>
-
-                        ))
-
-                    }
-
-
-
-                    <Link
-                        href="/login"
-
-                        className="
-                        flex
-                        items-center
-                        gap-2
-                        "
-                    >
-
-                        <FaRegUser/>
-
-                        ورود / ثبت نام
-
-                    </Link>
-
-
+                        <a
+                            href="/register"
+                            className="
+            rounded-lg
+            bg-[#C9A227]
+            px-4
+            py-2
+            text-center
+            font-bold
+            text-white
+        "
+                        >
+                            ثبت نام
+                        </a>
+                    </div>
 
                     <div
                         className="
@@ -321,21 +257,12 @@ export default function Navbar() {
                         gap-2
                         "
                     >
-
-                        <FaPhoneAlt/>
+                        <FaPhoneAlt />
 
                         {hotelInfo.phone}
-
                     </div>
-
-
                 </div>
-
-            }
-
-
+            )}
         </nav>
-
     );
-
 }

@@ -106,7 +106,7 @@ class RoomController extends Controller
             'room' => $room,
         ]);
     }
-    
+
     public function update(Request $request, Room $room)
     {
         $validated = $request->validate([
@@ -134,6 +134,8 @@ class RoomController extends Controller
             'capacity' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'image' => 'nullable|string',
+            'amenities' => 'nullable|array',
         ]);
 
         Room::create($validated);
@@ -142,25 +144,21 @@ class RoomController extends Controller
             'success',
             'اتاق با موفقیت ایجاد شد.'
         );
-
     }
-    
+
     public function destroy(Room $room)
-{
-    if ($room->reservations()->exists()) {
-        return back()->withErrors([
-            'room' => 'این اتاق دارای سابقه رزرو است و نمی‌توان آن را حذف کرد. می‌توانید آن را غیرفعال کنید.',
-        ]);
+    {
+        if ($room->reservations()->exists()) {
+            return back()->withErrors([
+                'room' => 'این اتاق دارای سابقه رزرو است و نمی‌توان آن را حذف کرد. می‌توانید آن را غیرفعال کنید.',
+            ]);
+        }
+
+        $room->delete();
+
+        return back()->with(
+            'success',
+            'اتاق با موفقیت حذف شد.'
+        );
     }
-
-    $room->delete();
-
-    return back()->with(
-        'success',
-        'اتاق با موفقیت حذف شد.'
-    );
-}
-    
-    
-
 }

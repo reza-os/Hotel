@@ -50,9 +50,9 @@ function StatCard({
 
 
 export default function Dashboard({
-    stats,
-    recentReservations,
-}) {
+    stats = {},
+    recentReservations = [],
+})  {
     return (
         <AdminLayout>
 
@@ -74,7 +74,7 @@ export default function Dashboard({
 
                     <StatCard
                         title="کل اتاق‌ها"
-                        value={stats.totalRooms}
+                        value={stats.totalRooms ?? 0}
                         icon={BedDouble}
                     />
 
@@ -200,9 +200,7 @@ export default function Dashboard({
                                             </td>
 
                                             <td className="p-4">
-                                                {statusLabels[
-                                                    reservation.status
-                                                ]}
+                                                {statusLabels[reservation.status] ?? 'نامشخص'}
                                             </td>
                                         </tr>
                                     )

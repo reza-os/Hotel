@@ -1,70 +1,56 @@
-import {
-    Head,
-    Link,
-    useForm,
-} from '@inertiajs/react';
+import { Head, Link, useForm } from "@inertiajs/react";
 
-import {
-    BedDouble,
-    Users,
-    Search,
-    Wifi,
-    Tv,
-    Wind,
-    Bath,
-} from 'lucide-react';
-
+import { BedDouble, Users, Search, Wifi, Tv, Wind, Bath } from "lucide-react";
 
 const typeLabels = {
-    single: 'یک نفره',
-    double: 'دو نفره',
-    suite: 'سوئیت',
-    deluxe: 'دلوکس',
+    single: "یک نفره",
+    double: "دو نفره",
+    suite: "سوئیت",
+    deluxe: "دلوکس",
 };
 
-
-export default function Index({
-    rooms = [],
-    filters = {},
-}) {
-
-    const {
-        data,
-        setData,
-        get,
-        processing,
-        errors,
-    } = useForm({
-        check_in: filters.check_in ?? '',
-        check_out: filters.check_out ?? '',
-        guests: filters.guests ?? '',
+export default function Index({ rooms = [], filters = {} }) {
+    const { data, setData, get, processing, errors } = useForm({
+        check_in: filters.check_in ?? "",
+        check_out: filters.check_out ?? "",
+        guests: filters.guests ?? "",
+        room_type: filters.room_type ?? "",
     });
-
 
     const search = (e) => {
         e.preventDefault();
 
-        get('/rooms', {
+        get("/rooms", {
             preserveScroll: true,
             preserveState: true,
         });
     };
 
+    const getRoomImage = (image) => {
+        if (!image) {
+            return null;
+        }
+
+        if (
+            image.startsWith("http://") ||
+            image.startsWith("https://") ||
+            image.startsWith("/")
+        ) {
+            return image;
+        }
+
+        return `/storage/${image}`;
+    };
 
     return (
         <>
             <Head title="اتاق‌های هتل" />
 
-            <div
-                dir="rtl"
-                className="min-h-screen bg-slate-100"
-            >
-
+            <div dir="rtl" className="min-h-screen bg-slate-100">
                 {/* Header */}
 
                 <header className="border-b bg-white">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-
                         <div>
                             <h1 className="text-xl font-black text-slate-900">
                                 رزرو هتل
@@ -86,13 +72,10 @@ export default function Index({
                                 اتاق‌ها
                             </Link>
                         </div>
-
                     </div>
                 </header>
 
-
                 <main className="mx-auto max-w-7xl px-6 py-10">
-
                     <div className="mb-8">
                         <h2 className="text-3xl font-black text-slate-900">
                             انتخاب اتاق
@@ -103,14 +86,12 @@ export default function Index({
                         </p>
                     </div>
 
-
                     {/* جستجو */}
 
                     <form
                         onSubmit={search}
-                        className="mb-10 grid gap-4 rounded-2xl bg-white p-6 shadow-sm md:grid-cols-4"
+                        className="mb-10 grid gap-4 rounded-2xl bg-white p-6 shadow-sm md:grid-cols-2 lg:grid-cols-5"
                     >
-
                         <div>
                             <label className="mb-2 block text-sm font-bold">
                                 تاریخ ورود
@@ -120,10 +101,7 @@ export default function Index({
                                 type="date"
                                 value={data.check_in}
                                 onChange={(e) =>
-                                    setData(
-                                        'check_in',
-                                        e.target.value
-                                    )
+                                    setData("check_in", e.target.value)
                                 }
                                 className="w-full rounded-xl border-slate-300"
                             />
@@ -135,7 +113,6 @@ export default function Index({
                             )}
                         </div>
 
-
                         <div>
                             <label className="mb-2 block text-sm font-bold">
                                 تاریخ خروج
@@ -145,10 +122,7 @@ export default function Index({
                                 type="date"
                                 value={data.check_out}
                                 onChange={(e) =>
-                                    setData(
-                                        'check_out',
-                                        e.target.value
-                                    )
+                                    setData("check_out", e.target.value)
                                 }
                                 className="w-full rounded-xl border-slate-300"
                             />
@@ -160,7 +134,6 @@ export default function Index({
                             )}
                         </div>
 
-
                         <div>
                             <label className="mb-2 block text-sm font-bold">
                                 تعداد مهمان
@@ -171,16 +144,32 @@ export default function Index({
                                 min="1"
                                 value={data.guests}
                                 onChange={(e) =>
-                                    setData(
-                                        'guests',
-                                        e.target.value
-                                    )
+                                    setData("guests", e.target.value)
                                 }
                                 placeholder="مثلاً 2"
                                 className="w-full rounded-xl border-slate-300"
                             />
                         </div>
 
+                        <div>
+                            <label className="mb-2 block text-sm font-bold">
+                                نوع اتاق
+                            </label>
+
+                            <select
+                                value={data.room_type}
+                                onChange={(e) =>
+                                    setData("room_type", e.target.value)
+                                }
+                                className="w-full rounded-xl border-slate-300"
+                            >
+                                <option value="">همه</option>
+                                <option value="single">یک نفره</option>
+                                <option value="double">دو نفره</option>
+                                <option value="deluxe">دلوکس</option>
+                                <option value="suite">سوئیت</option>
+                            </select>
+                        </div>
 
                         <div className="flex items-end">
                             <button
@@ -189,18 +178,14 @@ export default function Index({
                                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-white"
                             >
                                 <Search size={18} />
-
                                 جستجوی اتاق
                             </button>
                         </div>
-
                     </form>
-
 
                     {/* اتاق‌ها */}
 
                     {rooms.length === 0 ? (
-
                         <div className="rounded-2xl bg-white p-12 text-center">
                             <BedDouble
                                 size={45}
@@ -215,42 +200,30 @@ export default function Index({
                                 تاریخ یا تعداد مهمانان را تغییر دهید.
                             </p>
                         </div>
-
                     ) : (
-
                         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-
                             {rooms.map((room) => (
-
                                 <div
                                     key={room.id}
                                     className="overflow-hidden rounded-2xl bg-white shadow-sm"
                                 >
-
                                     {room.image ? (
-
                                         <img
-                                            src={`/storage/${room.image}`}
+                                            src={getRoomImage(room.image)}
                                             alt={room.title}
                                             className="h-52 w-full object-cover"
                                         />
-
                                     ) : (
-
                                         <div className="flex h-52 items-center justify-center bg-slate-200">
                                             <BedDouble
                                                 size={50}
                                                 className="text-slate-400"
                                             />
                                         </div>
-
                                     )}
 
-
                                     <div className="p-5">
-
                                         <div className="flex items-start justify-between">
-
                                             <div>
                                                 <h3 className="text-lg font-black text-slate-900">
                                                     {room.title}
@@ -262,58 +235,55 @@ export default function Index({
                                             </div>
 
                                             <span className="rounded-full bg-slate-100 px-3 py-1 text-xs">
-                                                {typeLabels[room.type] ?? room.type}
+                                                {typeLabels[room.type] ??
+                                                    room.type}
                                             </span>
-
                                         </div>
-
 
                                         <div className="mt-4 flex items-center gap-2 text-sm text-slate-600">
-
                                             <Users size={17} />
-
                                             ظرفیت {room.capacity} نفر
-
                                         </div>
-
 
                                         {/* امکانات */}
 
                                         {room.amenities?.length > 0 && (
-
                                             <div className="mt-4 flex flex-wrap gap-2">
-
-                                                {room.amenities.includes('wifi') && (
+                                                {room.amenities.includes(
+                                                    "wifi",
+                                                ) && (
                                                     <span className="rounded-lg bg-slate-100 p-2">
                                                         <Wifi size={16} />
                                                     </span>
                                                 )}
 
-                                                {room.amenities.includes('tv') && (
+                                                {room.amenities.includes(
+                                                    "tv",
+                                                ) && (
                                                     <span className="rounded-lg bg-slate-100 p-2">
                                                         <Tv size={16} />
                                                     </span>
                                                 )}
 
-                                                {room.amenities.includes('air_conditioner') && (
+                                                {room.amenities.includes(
+                                                    "air_conditioner",
+                                                ) && (
                                                     <span className="rounded-lg bg-slate-100 p-2">
                                                         <Wind size={16} />
                                                     </span>
                                                 )}
 
-                                                {room.amenities.includes('private_bathroom') && (
+                                                {room.amenities.includes(
+                                                    "private_bathroom",
+                                                ) && (
                                                     <span className="rounded-lg bg-slate-100 p-2">
                                                         <Bath size={16} />
                                                     </span>
                                                 )}
-
                                             </div>
-
                                         )}
 
-
                                         <div className="mt-6 flex items-center justify-between border-t pt-4">
-
                                             <div>
                                                 <p className="text-xs text-slate-500">
                                                     هر شب
@@ -321,36 +291,27 @@ export default function Index({
 
                                                 <p className="font-black text-slate-900">
                                                     {Number(
-                                                        room.price
+                                                        room.price,
                                                     ).toLocaleString(
-                                                        'fa-IR'
-                                                    )}
-                                                    {' '}تومان
+                                                        "fa-IR",
+                                                    )}{" "}
+                                                    تومان
                                                 </p>
                                             </div>
 
-
-                                          <Link
-    href={`/rooms/${room.id}?check_in=${filters.check_in ?? ''}&check_out=${filters.check_out ?? ''}&guests=${filters.guests ?? ''}`}
-    className="rounded-xl bg-slate-950 px-4 py-2 text-sm font-bold text-white"
->
-    مشاهده و رزرو
-</Link>
-
+                                            <Link
+                                                href={`/rooms/${room.id}?check_in=${filters.check_in ?? ""}&check_out=${filters.check_out ?? ""}&guests=${filters.guests ?? ""}`}
+                                                className="rounded-xl bg-slate-950 px-4 py-2 text-sm font-bold text-white"
+                                            >
+                                                مشاهده و رزرو
+                                            </Link>
                                         </div>
-
                                     </div>
-
                                 </div>
-
                             ))}
-
                         </div>
-
                     )}
-
                 </main>
-
             </div>
         </>
     );

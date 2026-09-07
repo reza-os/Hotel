@@ -11,39 +11,78 @@ import {
     Clock3,
     History,
     BedDouble,
+    ArrowLeft,
 } from 'lucide-react';
 
 
-const statusLabels = {
-    pending: 'در انتظار تایید',
-    confirmed: 'تایید شده',
-    rejected: 'رد شده',
-    cancelled: 'لغو شده',
-    completed: 'تکمیل شده',
+const statusInfo = {
+    pending: {
+        label: 'در انتظار تایید',
+        className:
+            'bg-amber-100 text-amber-700',
+    },
+
+    confirmed: {
+        label: 'تایید شده',
+        className:
+            'bg-emerald-100 text-emerald-700',
+    },
+
+    rejected: {
+        label: 'رد شده',
+        className:
+            'bg-red-100 text-red-700',
+    },
+
+    cancelled: {
+        label: 'لغو شده',
+        className:
+            'bg-gray-100 text-gray-600',
+    },
+
+    completed: {
+        label: 'تکمیل شده',
+        className:
+            'bg-blue-100 text-blue-700',
+    },
 };
 
 
 function StatCard({
     title,
-    value,
+    value = 0,
     icon: Icon,
 }) {
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <div
+            className="
+                rounded-2xl
+                border
+                border-gray-100
+                bg-white
+                p-5
+                shadow-sm
+                transition
+                hover:-translate-y-1
+                hover:shadow-md
+            "
+        >
 
             <div className="flex items-center justify-between">
 
                 <div>
-                    <p className="text-sm text-slate-500">
+
+                    <p className="text-sm text-gray-500">
                         {title}
                     </p>
 
-                    <p className="mt-2 text-3xl font-black">
+                    <p className="mt-2 text-3xl font-black text-gray-900">
                         {value}
                     </p>
+
                 </div>
 
-                <div className="rounded-xl bg-slate-100 p-3">
+                <div className="rounded-xl bg-[#F8F1D9] p-3 text-[#A98518]">
                     <Icon size={23} />
                 </div>
 
@@ -54,9 +93,36 @@ function StatCard({
 }
 
 
+function StatusBadge({ status }) {
+
+    const info =
+        statusInfo[status] ?? {
+            label: 'نامشخص',
+            className:
+                'bg-gray-100 text-gray-600',
+        };
+
+    return (
+        <span
+            className={`
+                inline-flex
+                rounded-full
+                px-3
+                py-1.5
+                text-xs
+                font-bold
+                ${info.className}
+            `}
+        >
+            {info.label}
+        </span>
+    );
+}
+
+
 export default function Dashboard({
-    stats,
-    nextReservation,
+    stats = {},
+    nextReservation = null,
     recentReservations = [],
 }) {
 
@@ -66,74 +132,145 @@ export default function Dashboard({
             <Head title="داشبورد کاربری" />
 
 
-            <div className="mb-8">
+            {/* Welcome */}
 
-                <h1 className="text-2xl font-black text-slate-900">
-                    داشبورد من
-                </h1>
+            <section
+                className="
+                    mb-8
+                    overflow-hidden
+                    rounded-3xl
+                    bg-gray-950
+                    px-7
+                    py-8
+                    text-white
+                    md:px-10
+                "
+            >
 
-                <p className="mt-1 text-sm text-slate-500">
-                    وضعیت رزروهای شما
-                </p>
+                <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
 
-            </div>
+                    <div>
 
+                        <span className="text-sm font-medium text-[#C9A227]">
+                            پنل کاربری
+                        </span>
+
+                        <h1 className="mt-2 text-3xl font-black">
+                            اقامت بعدی خود را مدیریت کنید
+                        </h1>
+
+                        <p className="mt-3 max-w-xl leading-8 text-gray-400">
+                            وضعیت رزروهای خود را مشاهده کنید یا
+                            یک اتاق جدید برای اقامت بعدی انتخاب کنید.
+                        </p>
+
+                    </div>
+
+
+                    <Link
+                        href="/rooms"
+                        className="
+                            inline-flex
+                            items-center
+                            justify-center
+                            gap-2
+                            rounded-xl
+                            bg-[#C9A227]
+                            px-6
+                            py-3
+                            font-bold
+                            text-white
+                            transition
+                            hover:bg-[#b69120]
+                        "
+                    >
+                        رزرو اتاق جدید
+
+                        <ArrowLeft size={18} />
+                    </Link>
+
+                </div>
+
+            </section>
+
+
+            {/* Stats */}
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
                 <StatCard
                     title="همه رزروها"
-                    value={stats.total}
+                    value={stats.total ?? 0}
                     icon={CalendarDays}
                 />
 
                 <StatCard
-                    title="در انتظار"
-                    value={stats.pending}
+                    title="در انتظار تایید"
+                    value={stats.pending ?? 0}
                     icon={Clock3}
                 />
 
                 <StatCard
                     title="تایید شده"
-                    value={stats.confirmed}
+                    value={stats.confirmed ?? 0}
                     icon={CheckCircle2}
                 />
 
                 <StatCard
                     title="تکمیل شده"
-                    value={stats.completed}
+                    value={stats.completed ?? 0}
                     icon={History}
                 />
 
             </div>
 
 
-            {/* رزرو آینده */}
+            {/* Next reservation */}
 
-            <div className="mt-8">
+            <section className="mt-9">
 
-                <h2 className="mb-4 text-lg font-black">
-                    رزرو آینده
-                </h2>
+                <div className="mb-4 flex items-center justify-between">
+
+                    <h2 className="text-xl font-black text-gray-900">
+                        رزرو آینده
+                    </h2>
+
+                    <Link
+                        href="/my-reservations"
+                        className="text-sm font-medium text-[#A98518]"
+                    >
+                        همه رزروها
+                    </Link>
+
+                </div>
 
 
                 {nextReservation ? (
 
-                    <div className="rounded-2xl bg-slate-950 p-6 text-white">
+                    <div
+                        className="
+                            rounded-2xl
+                            border
+                            border-gray-100
+                            bg-white
+                            p-6
+                            shadow-sm
+                        "
+                    >
 
-                        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+                        <div className="grid gap-6 md:grid-cols-4 md:items-center">
 
                             <div>
 
-                                <p className="text-sm text-slate-400">
+                                <p className="text-xs text-gray-500">
                                     اتاق
                                 </p>
 
-                                <h3 className="mt-1 text-xl font-black">
+                                <h3 className="mt-1 text-lg font-black">
                                     {nextReservation.room?.title}
                                 </h3>
 
-                                <p className="mt-1 text-sm text-slate-300">
+                                <p className="mt-1 text-sm text-gray-500">
                                     شماره اتاق{' '}
                                     {nextReservation.room?.room_number}
                                 </p>
@@ -143,11 +280,11 @@ export default function Dashboard({
 
                             <div>
 
-                                <p className="text-sm text-slate-400">
-                                    ورود
+                                <p className="text-xs text-gray-500">
+                                    تاریخ ورود
                                 </p>
 
-                                <p className="mt-1 font-bold">
+                                <p className="mt-2 font-bold">
                                     {nextReservation.check_in}
                                 </p>
 
@@ -156,11 +293,11 @@ export default function Dashboard({
 
                             <div>
 
-                                <p className="text-sm text-slate-400">
-                                    خروج
+                                <p className="text-xs text-gray-500">
+                                    تاریخ خروج
                                 </p>
 
-                                <p className="mt-1 font-bold">
+                                <p className="mt-2 font-bold">
                                     {nextReservation.check_out}
                                 </p>
 
@@ -169,17 +306,15 @@ export default function Dashboard({
 
                             <div>
 
-                                <p className="text-sm text-slate-400">
+                                <p className="mb-2 text-xs text-gray-500">
                                     وضعیت
                                 </p>
 
-                                <p className="mt-1 font-bold">
-                                    {
-                                        statusLabels[
-                                            nextReservation.status
-                                        ]
+                                <StatusBadge
+                                    status={
+                                        nextReservation.status
                                     }
-                                </p>
+                                />
 
                             </div>
 
@@ -189,44 +324,86 @@ export default function Dashboard({
 
                 ) : (
 
-                    <div className="rounded-2xl border border-dashed bg-white p-10 text-center">
+                    <div
+                        className="
+                            rounded-2xl
+                            border
+                            border-dashed
+                            border-gray-300
+                            bg-white
+                            p-10
+                            text-center
+                        "
+                    >
 
                         <BedDouble
-                            size={42}
-                            className="mx-auto text-slate-300"
+                            size={44}
+                            className="mx-auto text-gray-300"
                         />
 
-                        <p className="mt-3 text-slate-500">
-                            رزرو فعالی ندارید.
+                        <h3 className="mt-4 font-bold text-gray-800">
+                            هنوز رزرو فعالی ندارید
+                        </h3>
+
+                        <p className="mt-2 text-sm text-gray-500">
+                            اتاق مناسب خود را انتخاب و رزرو کنید.
                         </p>
 
                         <Link
                             href="/rooms"
-                            className="mt-4 inline-block rounded-xl bg-slate-950 px-5 py-2 text-sm text-white"
+                            className="
+                                mt-5
+                                inline-flex
+                                rounded-xl
+                                bg-gray-950
+                                px-5
+                                py-2.5
+                                text-sm
+                                text-white
+                            "
                         >
-                            رزرو اتاق
+                            مشاهده اتاق‌ها
                         </Link>
 
                     </div>
 
                 )}
 
-            </div>
+            </section>
 
 
-            {/* آخرین رزروها */}
+            {/* Recent reservations */}
 
-            <div className="mt-8 rounded-2xl border bg-white">
+            <section
+                className="
+                    mt-9
+                    overflow-hidden
+                    rounded-2xl
+                    border
+                    border-gray-100
+                    bg-white
+                    shadow-sm
+                "
+            >
 
                 <div className="flex items-center justify-between border-b p-5">
 
-                    <h2 className="font-black">
-                        آخرین رزروها
-                    </h2>
+                    <div>
+
+                        <h2 className="font-black">
+                            آخرین رزروها
+                        </h2>
+
+                        <p className="mt-1 text-xs text-gray-500">
+                            آخرین درخواست‌های رزرو شما
+                        </p>
+
+                    </div>
+
 
                     <Link
                         href="/my-reservations"
-                        className="text-sm text-slate-600"
+                        className="text-sm font-medium text-[#A98518]"
                     >
                         مشاهده همه
                     </Link>
@@ -234,75 +411,88 @@ export default function Dashboard({
                 </div>
 
 
-                <div className="overflow-x-auto">
+                {recentReservations.length === 0 ? (
 
-                    <table className="w-full text-right">
+                    <div className="p-10 text-center text-sm text-gray-500">
+                        هنوز رزروی ثبت نشده است.
+                    </div>
 
-                        <thead className="bg-slate-50 text-sm text-slate-500">
+                ) : (
 
-                            <tr>
-                                <th className="p-4">
-                                    اتاق
-                                </th>
+                    <div className="overflow-x-auto">
 
-                                <th className="p-4">
-                                    ورود
-                                </th>
+                        <table className="w-full min-w-[650px] text-right">
 
-                                <th className="p-4">
-                                    خروج
-                                </th>
+                            <thead className="bg-gray-50 text-sm text-gray-500">
 
-                                <th className="p-4">
-                                    وضعیت
-                                </th>
-                            </tr>
+                                <tr>
+                                    <th className="p-4">
+                                        اتاق
+                                    </th>
 
-                        </thead>
+                                    <th className="p-4">
+                                        ورود
+                                    </th>
+
+                                    <th className="p-4">
+                                        خروج
+                                    </th>
+
+                                    <th className="p-4">
+                                        وضعیت
+                                    </th>
+                                </tr>
+
+                            </thead>
 
 
-                        <tbody>
+                            <tbody>
 
-                            {recentReservations.map(
-                                (reservation) => (
+                                {recentReservations.map(
+                                    (reservation) => (
 
-                                    <tr
-                                        key={reservation.id}
-                                        className="border-t"
-                                    >
+                                        <tr
+                                            key={reservation.id}
+                                            className="border-t border-gray-100"
+                                        >
 
-                                        <td className="p-4">
-                                            {reservation.room?.title}
-                                        </td>
+                                            <td className="p-4 font-medium">
+                                                {reservation.room?.title ??
+                                                    'اتاق'}
+                                            </td>
 
-                                        <td className="p-4">
-                                            {reservation.check_in}
-                                        </td>
+                                            <td className="p-4 text-gray-600">
+                                                {reservation.check_in}
+                                            </td>
 
-                                        <td className="p-4">
-                                            {reservation.check_out}
-                                        </td>
+                                            <td className="p-4 text-gray-600">
+                                                {reservation.check_out}
+                                            </td>
 
-                                        <td className="p-4">
-                                            {
-                                                statusLabels[
-                                                    reservation.status
-                                                ]
-                                            }
-                                        </td>
+                                            <td className="p-4">
 
-                                    </tr>
+                                                <StatusBadge
+                                                    status={
+                                                        reservation.status
+                                                    }
+                                                />
 
-                                )
-                            )}
+                                            </td>
 
-                        </tbody>
+                                        </tr>
 
-                    </table>
+                                    )
+                                )}
 
-                </div>
+                            </tbody>
 
-            </div>
+                        </table>
+
+                    </div>
+
+                )}
+
+            </section>
 
         </UserLayout>
     );

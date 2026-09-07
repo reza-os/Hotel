@@ -13,6 +13,7 @@ use App\Http\Controllers\User\UserDashboardController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Room;
 
 
 /*
@@ -22,14 +23,21 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
+
+    $rooms = Room::query()
+        ->where('is_active', true)
+        ->where('operational_status', 'ready')
+        ->latest()
+        ->take(6)
+        ->get();
+
     return Inertia::render('HotelHomepage', [
+        'rooms' => $rooms,
+
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
 })->name('home');
-
 
 /*
 |--------------------------------------------------------------------------
