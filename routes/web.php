@@ -21,15 +21,24 @@ use Inertia\Inertia;
 |--------------------------------------------------------------------------
 */
 
+
+
 Route::get('/', function () {
+
+    $featuredRooms = Room::query()
+        ->where('is_active', true)
+        ->where('operational_status', 'ready')
+        ->latest()
+        ->take(6)
+        ->get();
+
     return Inertia::render('HotelHomepage', [
+        'featuredRooms' => $featuredRooms,
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
-})->name('home');
 
+})->name('home');
 
 /*
 |--------------------------------------------------------------------------

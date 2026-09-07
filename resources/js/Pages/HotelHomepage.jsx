@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router ,usePage } from "@inertiajs/react";
 
 import {
     FaArrowLeft,
@@ -23,6 +23,7 @@ import {
 
 import Navbar from "@/Components/Home/Navbar";
 import Footer from "@/Components/Home/Footer";
+
 
 
 export default function Home({
@@ -68,74 +69,7 @@ export default function Home({
     |--------------------------------------------------------------------------
     */
 
-    const roomData =
-        featuredRooms.length > 0
-            ? featuredRooms
-            : [
-                  {
-                      id: 1,
-                      title: "اتاق استاندارد",
-                      type: "standard",
-
-                      price: 2500000,
-
-                      capacity: 2,
-
-                      image: "/pictures/rooms/room-1.jpg",
-
-                      description:
-                          "اتاقی آرام و مدرن مناسب اقامت دو نفر، مجهز به تمامی امکانات مورد نیاز.",
-
-                      features: [
-                          "اینترنت رایگان",
-                          "صبحانه",
-                          "تلویزیون",
-                      ],
-                  },
-
-                  {
-                      id: 2,
-                      title: "اتاق دلوکس",
-                      type: "deluxe",
-
-                      price: 3900000,
-
-                      capacity: 3,
-
-                      image: "/pictures/rooms/room-2.jpg",
-
-                      description:
-                          "اتاق دلوکس با فضای بزرگ‌تر، طراحی لوکس و چشم‌اندازی زیبا برای اقامتی خاص.",
-
-                      features: [
-                          "اینترنت رایگان",
-                          "صبحانه",
-                          "مینی بار",
-                      ],
-                  },
-
-                  {
-                      id: 3,
-                      title: "سوئیت رویال",
-                      type: "suite",
-
-                      price: 5900000,
-
-                      capacity: 4,
-
-                      image: "/pictures/rooms/room-3.jpg",
-
-                      description:
-                          "سوئیتی مجلل و بزرگ برای مهمانانی که به دنبال بالاترین سطح آسایش هستند.",
-
-                      features: [
-                          "صبحانه",
-                          "جکوزی",
-                          "مینی بار",
-                      ],
-                  },
-              ];
-
+    const roomData = featuredRooms;
 
     /*
     |--------------------------------------------------------------------------
@@ -147,96 +81,96 @@ export default function Home({
         facilities.length > 0
             ? facilities
             : [
-                  {
-                      id: 1,
-                      title: "اینترنت رایگان",
-                      description:
-                          "اینترنت پرسرعت در اتاق‌ها و بخش‌های عمومی هتل.",
+                {
+                    id: 1,
+                    title: "اینترنت رایگان",
+                    description:
+                        "اینترنت پرسرعت در اتاق‌ها و بخش‌های عمومی هتل.",
 
-                      icon: "wifi",
-                  },
+                    icon: "wifi",
+                },
 
-                  {
-                      id: 2,
-                      title: "رستوران",
-                      description:
-                          "رستوران با منوی متنوع غذاهای ایرانی و بین‌المللی.",
+                {
+                    id: 2,
+                    title: "رستوران",
+                    description:
+                        "رستوران با منوی متنوع غذاهای ایرانی و بین‌المللی.",
 
-                      icon: "restaurant",
-                  },
+                    icon: "restaurant",
+                },
 
-                  {
-                      id: 3,
-                      title: "پارکینگ اختصاصی",
-                      description:
-                          "پارکینگ امن و اختصاصی برای مهمانان هتل.",
+                {
+                    id: 3,
+                    title: "پارکینگ اختصاصی",
+                    description:
+                        "پارکینگ امن و اختصاصی برای مهمانان هتل.",
 
-                      icon: "parking",
-                  },
+                    icon: "parking",
+                },
 
-                  {
-                      id: 4,
-                      title: "خدمات ۲۴ ساعته",
-                      description:
-                          "پاسخگویی و خدمات‌رسانی در تمام ساعات شبانه‌روز.",
+                {
+                    id: 4,
+                    title: "خدمات ۲۴ ساعته",
+                    description:
+                        "پاسخگویی و خدمات‌رسانی در تمام ساعات شبانه‌روز.",
 
-                      icon: "service",
-                  },
+                    icon: "service",
+                },
 
-                  {
-                      id: 5,
-                      title: "استخر",
-                      description:
-                          "فضای آرام و مجهز برای استراحت و تفریح مهمانان.",
+                {
+                    id: 5,
+                    title: "استخر",
+                    description:
+                        "فضای آرام و مجهز برای استراحت و تفریح مهمانان.",
 
-                      icon: "pool",
-                  },
+                    icon: "pool",
+                },
 
-                  {
-                      id: 6,
-                      title: "صبحانه",
-                      description:
-                          "صبحانه متنوع و تازه برای شروع یک روز عالی.",
+                {
+                    id: 6,
+                    title: "صبحانه",
+                    description:
+                        "صبحانه متنوع و تازه برای شروع یک روز عالی.",
 
-                      icon: "breakfast",
-                  },
-              ];
+                    icon: "breakfast",
+                },
+            ];
 
 
     const testimonialData =
         testimonials.length > 0
             ? testimonials
             : [
-                  {
-                      id: 1,
-                      name: "علی رضایی",
+                {
+                    id: 1,
+                    name: "علی رضایی",
 
-                      comment:
-                          "محیط هتل بسیار آرام و تمیز بود و برخورد کارکنان واقعاً عالی بود.",
+                    comment:
+                        "محیط هتل بسیار آرام و تمیز بود و برخورد کارکنان واقعاً عالی بود.",
 
-                      rating: 5,
-                  },
+                    rating: 5,
+                },
 
-                  {
-                      id: 2,
-                      name: "سارا احمدی",
+                {
+                    id: 2,
+                    name: "سارا احمدی",
 
-                      comment:
-                          "اتاق دلوکس بسیار زیبا بود و کیفیت خدمات از چیزی که انتظار داشتم بهتر بود.",
+                    comment:
+                        "اتاق دلوکس بسیار زیبا بود و کیفیت خدمات از چیزی که انتظار داشتم بهتر بود.",
 
-                      rating: 5,
-                  },
+                    rating: 5,
+                },
 
-                  {
-                      id: 3,
-                      name: "محمد کریمی",
+                {
+                    id: 3,
+                    name: "محمد کریمی",
 
-                      comment:
-                          "دسترسی مناسب، محیط تمیز و صبحانه خوب. تجربه اقامت بسیار رضایت‌بخشی بود.",
+                    comment:
+                        "دسترسی مناسب، محیط تمیز و صبحانه خوب. تجربه اقامت بسیار رضایت‌بخشی بود.",
 
-                      rating: 4,
-                  },
-              ];
+                    rating: 4,
+                },
+            ];
 
 
     /*
@@ -279,6 +213,26 @@ export default function Home({
     const formatPrice = (price) => {
         return new Intl.NumberFormat("fa-IR").format(price);
     };
+
+
+
+    const getRoomImage = (image) => {
+        if (!image) {
+            return "/pictures/rooms/room-1.jpg";
+        }
+
+        if (
+            image.startsWith("http://") ||
+            image.startsWith("https://") ||
+            image.startsWith("/")
+        ) {
+            return image;
+        }
+
+        return `/storage/${image}`;
+    };
+
+
 
 
     return (
@@ -533,9 +487,16 @@ export default function Home({
                                     onChange={handleFilterChange}
                                     className="booking-input"
                                 >
-                                    <option value="">همه اتاق‌ها</option>
-                                    <option value="standard">
-                                        استاندارد
+                                    <option value="">
+                                        همه اتاق‌ها
+                                    </option>
+
+                                    <option value="single">
+                                        یک نفره
+                                    </option>
+
+                                    <option value="double">
+                                        دو نفره
                                     </option>
 
                                     <option value="deluxe">
@@ -752,7 +713,7 @@ export default function Home({
                                     <div className="relative overflow-hidden">
 
                                         <img
-                                            src={room.image}
+                                            src={getRoomImage(room.image)}
                                             alt={room.title}
                                             className="
                                                 h-64
@@ -820,26 +781,23 @@ export default function Home({
                                             "
                                         >
 
-                                            {room.features?.map(
-                                                (feature) => (
-
+                                            {room.amenities?.map(
+                                                (amenity) => (
                                                     <span
-                                                        key={feature}
+                                                        key={amenity}
                                                         className="
-                                                            rounded-full
-                                                            bg-gray-100
-                                                            px-3
-                                                            py-1.5
-                                                            text-xs
-                                                            text-gray-600
-                                                        "
+                                                         rounded-full
+                                                         bg-gray-100
+                                                                 px-3
+                                                                  py-1.5
+                                                                    text-xs
+                                                                 text-gray-600
+                                                                     "
                                                     >
-                                                        {feature}
+                                                        {amenity}
                                                     </span>
-
                                                 )
                                             )}
-
                                         </div>
 
 
@@ -948,7 +906,10 @@ export default function Home({
                     FACILITIES
                 ====================================== */}
 
-                <section className="py-24">
+                <section
+                    id="facilities"
+                    className="py-24"
+                >
 
                     <div
                         className="
@@ -1079,7 +1040,10 @@ export default function Home({
                     GALLERY
                 ====================================== */}
 
-                <section className="bg-[#F8F6F1] py-24">
+                <section
+                    id="gallery"
+                    className="bg-[#F8F6F1] py-24"
+                >
 
                     <div
                         className="

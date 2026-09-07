@@ -31,6 +31,11 @@ class UserRoomController extends Controller
                 'integer',
                 'min:1',
             ],
+            'room_type' => [
+                'nullable',
+                'string',
+                'max:100',
+            ],
         ]);
 
         $rooms = Room::query()
@@ -48,6 +53,15 @@ class UserRoomController extends Controller
                 'capacity',
                 '>=',
                 $validated['guests']
+            );
+        }
+
+
+        if (!empty($validated['room_type'])) {
+
+            $rooms->where(
+                'type',
+                $validated['room_type']
             );
         }
 
@@ -92,13 +106,15 @@ class UserRoomController extends Controller
 
                 'filters' => [
                     'check_in' =>
-                        $validated['check_in'] ?? '',
+                    $validated['check_in'] ?? '',
 
                     'check_out' =>
-                        $validated['check_out'] ?? '',
+                    $validated['check_out'] ?? '',
 
                     'guests' =>
-                        $validated['guests'] ?? '',
+                    $validated['guests'] ?? '',
+                    'room_type' =>
+                    $validated['room_type'] ?? '',
                 ],
             ]
         );
@@ -151,13 +167,13 @@ class UserRoomController extends Controller
 
                 'booking' => [
                     'check_in' =>
-                        $validated['check_in'] ?? '',
+                    $validated['check_in'] ?? '',
 
                     'check_out' =>
-                        $validated['check_out'] ?? '',
+                    $validated['check_out'] ?? '',
 
                     'guests' =>
-                        $validated['guests'] ?? 1,
+                    $validated['guests'] ?? 1,
                 ],
             ]
         );

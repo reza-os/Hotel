@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
 import {
     FaRegUser,
@@ -15,6 +15,11 @@ const hotelInfo = {
     phone: "09392738068",
 };
 
+
+
+const { auth } = usePage().props;
+
+const user = auth?.user;
 
 const menuItems = [
     {
@@ -105,7 +110,7 @@ export default function Navbar() {
             >
 
                 {
-                    menuItems.map((item,index)=>(
+                    menuItems.map((item, index) => (
 
                         <Link
                             key={index}
@@ -119,13 +124,12 @@ export default function Navbar() {
                             transition
                             duration-300
 
-                            ${
-                                item.active
-                                ?
-                                "text-gold"
-                                :
-                                "hover:text-gold"
-                            }
+                            ${item.active
+                                    ?
+                                    "text-gold"
+                                    :
+                                    "hover:text-gold"
+                                }
 
                             `}
                         >
@@ -173,25 +177,79 @@ export default function Navbar() {
             >
 
 
-                <Link
-                    href="/login"
+                {!user ? (
 
-                    className="
-                    flex
-                    items-center
-                    gap-2
-                    hover:text-gold
-                    transition
-                    "
-                >
+                    <div className="flex items-center gap-4">
 
-                    <FaRegUser size={18}/>
+                        <Link
+                            href="/login"
+                            className="flex items-center gap-2 transition hover:text-[#C9A227]"
+                        >
+                            <FaRegUser size={18} />
+                            ورود
+                        </Link>
 
-                    <span>
-                        ورود / ثبت نام
-                    </span>
+                        <Link
+                            href="/register"
+                            className="rounded-lg bg-[#C9A227] px-4 py-2 text-sm text-white"
+                        >
+                            ثبت نام
+                        </Link>
 
-                </Link>
+                    </div>
+
+                ) : user.is_admin ? (
+
+                    <div className="flex items-center gap-4">
+
+                        <Link
+                            href="/admin/dashboard"
+                            className="transition hover:text-[#C9A227]"
+                        >
+                            پنل مدیریت
+                        </Link>
+
+                        <Link
+                            href="/logout"
+                            method="post"
+                            as="button"
+                            className="transition hover:text-red-400"
+                        >
+                            خروج
+                        </Link>
+
+                    </div>
+
+                ) : (
+
+                    <div className="flex items-center gap-4">
+
+                        <Link
+                            href="/dashboard"
+                            className="transition hover:text-[#C9A227]"
+                        >
+                            پنل کاربری
+                        </Link>
+
+                        <Link
+                            href="/my-reservations"
+                            className="transition hover:text-[#C9A227]"
+                        >
+                            رزروهای من
+                        </Link>
+
+                        <Link
+                            href="/logout"
+                            method="post"
+                            as="button"
+                            className="transition hover:text-red-400"
+                        >
+                            خروج
+                        </Link>
+
+                    </div>
+
+                )}
 
 
 
@@ -204,7 +262,7 @@ export default function Navbar() {
                     "
                 >
 
-                    <FaPhoneAlt size={17}/>
+                    <FaPhoneAlt size={17} />
 
                     <span>
                         {hotelInfo.phone}
@@ -235,10 +293,10 @@ export default function Navbar() {
 
                 {
                     openMenu
-                    ?
-                    <FaTimes/>
-                    :
-                    <FaBars/>
+                        ?
+                        <FaTimes />
+                        :
+                        <FaBars />
                 }
 
 
@@ -272,7 +330,7 @@ export default function Navbar() {
 
 
                     {
-                        menuItems.map((item,index)=>(
+                        menuItems.map((item, index) => (
 
                             <Link
 
@@ -306,7 +364,7 @@ export default function Navbar() {
                         "
                     >
 
-                        <FaRegUser/>
+                        <FaRegUser />
 
                         ورود / ثبت نام
 
@@ -322,7 +380,7 @@ export default function Navbar() {
                         "
                     >
 
-                        <FaPhoneAlt/>
+                        <FaPhoneAlt />
 
                         {hotelInfo.phone}
 
