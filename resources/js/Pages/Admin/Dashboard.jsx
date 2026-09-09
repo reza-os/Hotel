@@ -149,7 +149,7 @@ export default function Dashboard({
 
                     <div className="overflow-x-auto">
 
-                        <table className="w-full text-right">
+                        <table className="w-full min-w-[650px] text-right">
 
                             <thead className="bg-slate-50 text-sm text-slate-500">
                                 <tr>

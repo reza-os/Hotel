@@ -24,7 +24,6 @@ import {
 import Navbar from "@/Components/Home/Navbar";
 import Footer from "@/Components/Home/Footer";
 
-
 export default function Home({
     hotel = null,
     featuredRooms = [],
@@ -56,11 +55,10 @@ export default function Home({
         short_description:
             "ترکیبی از آرامش، کیفیت و مهمان‌نوازی برای ساختن اقامتی خاطره‌انگیز.",
 
-        hero_image: "/pictures/hotel-banner.jpg",
+        hero_image: "/pictures/hotel-banner.png",
 
-        about_image: "/pictures/about-hotel.jpg",
+        about_image: "/pictures/about-hotel.png",
     };
-
 
     /*
     |--------------------------------------------------------------------------
@@ -68,74 +66,7 @@ export default function Home({
     |--------------------------------------------------------------------------
     */
 
-    const roomData =
-        featuredRooms.length > 0
-            ? featuredRooms
-            : [
-                  {
-                      id: 1,
-                      title: "اتاق استاندارد",
-                      type: "standard",
-
-                      price: 2500000,
-
-                      capacity: 2,
-
-                      image: "/pictures/rooms/room-1.jpg",
-
-                      description:
-                          "اتاقی آرام و مدرن مناسب اقامت دو نفر، مجهز به تمامی امکانات مورد نیاز.",
-
-                      features: [
-                          "اینترنت رایگان",
-                          "صبحانه",
-                          "تلویزیون",
-                      ],
-                  },
-
-                  {
-                      id: 2,
-                      title: "اتاق دلوکس",
-                      type: "deluxe",
-
-                      price: 3900000,
-
-                      capacity: 3,
-
-                      image: "/pictures/rooms/room-2.jpg",
-
-                      description:
-                          "اتاق دلوکس با فضای بزرگ‌تر، طراحی لوکس و چشم‌اندازی زیبا برای اقامتی خاص.",
-
-                      features: [
-                          "اینترنت رایگان",
-                          "صبحانه",
-                          "مینی بار",
-                      ],
-                  },
-
-                  {
-                      id: 3,
-                      title: "سوئیت رویال",
-                      type: "suite",
-
-                      price: 5900000,
-
-                      capacity: 4,
-
-                      image: "/pictures/rooms/room-3.jpg",
-
-                      description:
-                          "سوئیتی مجلل و بزرگ برای مهمانانی که به دنبال بالاترین سطح آسایش هستند.",
-
-                      features: [
-                          "صبحانه",
-                          "جکوزی",
-                          "مینی بار",
-                      ],
-                  },
-              ];
-
+    const roomData = featuredRooms;
 
     /*
     |--------------------------------------------------------------------------
@@ -168,8 +99,7 @@ export default function Home({
                   {
                       id: 3,
                       title: "پارکینگ اختصاصی",
-                      description:
-                          "پارکینگ امن و اختصاصی برای مهمانان هتل.",
+                      description: "پارکینگ امن و اختصاصی برای مهمانان هتل.",
 
                       icon: "parking",
                   },
@@ -195,13 +125,11 @@ export default function Home({
                   {
                       id: 6,
                       title: "صبحانه",
-                      description:
-                          "صبحانه متنوع و تازه برای شروع یک روز عالی.",
+                      description: "صبحانه متنوع و تازه برای شروع یک روز عالی.",
 
                       icon: "breakfast",
                   },
               ];
-
 
     const testimonialData =
         testimonials.length > 0
@@ -238,7 +166,6 @@ export default function Home({
                   },
               ];
 
-
     /*
     |--------------------------------------------------------------------------
     | فرم جستجوی اتاق
@@ -252,7 +179,6 @@ export default function Home({
         room_type: "",
     });
 
-
     const handleFilterChange = (event) => {
         const { name, value } = event.target;
 
@@ -261,7 +187,6 @@ export default function Home({
             [name]: value,
         }));
     };
-
 
     const searchRooms = (event) => {
         event.preventDefault();
@@ -275,28 +200,36 @@ export default function Home({
         router.get("/rooms", filters);
     };
 
-
     const formatPrice = (price) => {
         return new Intl.NumberFormat("fa-IR").format(price);
     };
 
+    const getRoomImage = (image) => {
+        if (!image) {
+            return "/pictures/rooms/default-room.png";
+        }
+
+        if (
+            image.startsWith("http://") ||
+            image.startsWith("https://") ||
+            image.startsWith("/")
+        ) {
+            return image;
+        }
+
+        return `/storage/${image}`;
+    };
 
     return (
         <>
             <Head title={hotelData.name} />
 
-
-            <main
-                dir="rtl"
-                className="bg-white text-gray-900"
-            >
-
+            <main dir="rtl" className="bg-white text-gray-900">
                 {/* =====================================
                     HERO
                 ====================================== */}
 
                 <section className="relative min-h-[780px]">
-
                     <img
                         src={hotelData.hero_image}
                         alt={hotelData.name}
@@ -309,7 +242,6 @@ export default function Home({
                         "
                     />
 
-
                     <div
                         className="
                             absolute
@@ -321,9 +253,7 @@ export default function Home({
                         "
                     />
 
-
                     <Navbar />
-
 
                     <div
                         className="
@@ -340,9 +270,7 @@ export default function Home({
                             lg:px-12
                         "
                     >
-
                         <div className="max-w-2xl text-white">
-
                             <span
                                 className="
                                     mb-5
@@ -357,7 +285,6 @@ export default function Home({
                                 {hotelData.english_name}
                             </span>
 
-
                             <h1
                                 className="
                                     mb-6
@@ -370,10 +297,8 @@ export default function Home({
                             >
                                 اقامتی متفاوت،
                                 <br />
-
                                 آرامشی ماندگار
                             </h1>
-
 
                             <p
                                 className="
@@ -388,7 +313,6 @@ export default function Home({
                                 {hotelData.short_description}
                             </p>
 
-
                             <div
                                 className="
                                     flex
@@ -396,7 +320,6 @@ export default function Home({
                                     gap-4
                                 "
                             >
-
                                 <Link
                                     href="/rooms"
                                     className="
@@ -412,7 +335,6 @@ export default function Home({
                                 >
                                     مشاهده اتاق‌ها
                                 </Link>
-
 
                                 <a
                                     href="#about"
@@ -430,13 +352,9 @@ export default function Home({
                                 >
                                     درباره هتل
                                 </a>
-
                             </div>
-
                         </div>
-
                     </div>
-
 
                     {/* Booking Search */}
 
@@ -452,7 +370,6 @@ export default function Home({
                             translate-y-1/2
                         "
                     >
-
                         <form
                             onSubmit={searchRooms}
                             className="
@@ -468,12 +385,10 @@ export default function Home({
                                 lg:p-7
                             "
                         >
-
                             <BookingField
                                 icon={<FaCalendarAlt />}
                                 label="تاریخ ورود"
                             >
-
                                 <input
                                     type="date"
                                     name="check_in"
@@ -481,15 +396,12 @@ export default function Home({
                                     onChange={handleFilterChange}
                                     className="booking-input"
                                 />
-
                             </BookingField>
-
 
                             <BookingField
                                 icon={<FaCalendarAlt />}
                                 label="تاریخ خروج"
                             >
-
                                 <input
                                     type="date"
                                     name="check_out"
@@ -497,15 +409,12 @@ export default function Home({
                                     onChange={handleFilterChange}
                                     className="booking-input"
                                 />
-
                             </BookingField>
-
 
                             <BookingField
                                 icon={<FaUsers />}
                                 label="تعداد مهمان"
                             >
-
                                 <select
                                     name="guests"
                                     value={filters.guests}
@@ -518,15 +427,9 @@ export default function Home({
                                     <option value="4">۴ نفر</option>
                                     <option value="5">۵ نفر</option>
                                 </select>
-
                             </BookingField>
 
-
-                            <BookingField
-                                icon={<FaBed />}
-                                label="نوع اتاق"
-                            >
-
+                            <BookingField icon={<FaBed />} label="نوع اتاق">
                                 <select
                                     name="room_type"
                                     value={filters.room_type}
@@ -534,21 +437,13 @@ export default function Home({
                                     className="booking-input"
                                 >
                                     <option value="">همه اتاق‌ها</option>
-                                    <option value="standard">
-                                        استاندارد
-                                    </option>
+                                    <option value="standard">استاندارد</option>
 
-                                    <option value="deluxe">
-                                        دلوکس
-                                    </option>
+                                    <option value="deluxe">دلوکس</option>
 
-                                    <option value="suite">
-                                        سوئیت
-                                    </option>
+                                    <option value="suite">سوئیت</option>
                                 </select>
-
                             </BookingField>
-
 
                             <button
                                 type="submit"
@@ -565,13 +460,9 @@ export default function Home({
                             >
                                 جستجوی اتاق
                             </button>
-
                         </form>
-
                     </div>
-
                 </section>
-
 
                 {/* =====================================
                     ABOUT
@@ -594,9 +485,7 @@ export default function Home({
                         lg:px-12
                     "
                 >
-
                     <div className="relative">
-
                         <img
                             src={hotelData.about_image}
                             alt={`درباره ${hotelData.name}`}
@@ -607,7 +496,6 @@ export default function Home({
                                 object-cover
                             "
                         />
-
 
                         <div
                             className="
@@ -623,26 +511,17 @@ export default function Home({
                                 md:left-8
                             "
                         >
-                            <strong className="block text-3xl">
-                                +۱۰
-                            </strong>
+                            <strong className="block text-3xl">+۱۰</strong>
 
-                            <span className="text-sm">
-                                سال تجربه میزبانی
-                            </span>
-
+                            <span className="text-sm">سال تجربه میزبانی</span>
                         </div>
-
                     </div>
 
-
                     <div>
-
                         <SectionTitle
                             eyebrow="درباره هتل"
                             title="مهمان‌نوازی در قلب هتل آریا"
                         />
-
 
                         <p
                             className="
@@ -654,7 +533,6 @@ export default function Home({
                             {hotelData.description}
                         </p>
 
-
                         <p
                             className="
                                 mt-4
@@ -662,11 +540,10 @@ export default function Home({
                                 text-gray-600
                             "
                         >
-                            تلاش ما فراهم کردن محیطی آرام، امکانات
-                            مناسب و خدمات حرفه‌ای است تا اقامت شما
-                            به تجربه‌ای خاطره‌انگیز تبدیل شود.
+                            تلاش ما فراهم کردن محیطی آرام، امکانات مناسب و خدمات
+                            حرفه‌ای است تا اقامت شما به تجربه‌ای خاطره‌انگیز
+                            تبدیل شود.
                         </p>
-
 
                         <Link
                             href="/about"
@@ -682,15 +559,10 @@ export default function Home({
                             "
                         >
                             بیشتر درباره هتل
-
                             <FaArrowLeft />
-
                         </Link>
-
                     </div>
-
                 </section>
-
 
                 {/* =====================================
                     ROOMS
@@ -702,7 +574,6 @@ export default function Home({
                         py-24
                     "
                 >
-
                     <div
                         className="
                             mx-auto
@@ -712,14 +583,12 @@ export default function Home({
                             lg:px-12
                         "
                     >
-
                         <SectionTitle
                             centered
                             eyebrow="اقامت در آریا"
                             title="اتاق‌های منتخب هتل"
                             description="اتاقی متناسب با نیاز خود انتخاب کنید و اقامتی آرام و راحت را تجربه کنید."
                         />
-
 
                         <div
                             className="
@@ -731,9 +600,7 @@ export default function Home({
                                 lg:grid-cols-3
                             "
                         >
-
                             {roomData.map((room) => (
-
                                 <article
                                     key={room.id}
                                     className="
@@ -748,11 +615,9 @@ export default function Home({
                                         hover:shadow-xl
                                     "
                                 >
-
                                     <div className="relative overflow-hidden">
-
                                         <img
-                                            src={room.image}
+                                            src={getRoomImage(room.image)}
                                             alt={room.title}
                                             className="
                                                 h-64
@@ -763,7 +628,6 @@ export default function Home({
                                                 group-hover:scale-105
                                             "
                                         />
-
 
                                         <span
                                             className="
@@ -781,12 +645,9 @@ export default function Home({
                                         >
                                             ظرفیت {room.capacity} نفر
                                         </span>
-
                                     </div>
 
-
                                     <div className="p-6">
-
                                         <h3
                                             className="
                                                 mb-3
@@ -796,7 +657,6 @@ export default function Home({
                                         >
                                             {room.title}
                                         </h3>
-
 
                                         <p
                                             className="
@@ -810,7 +670,6 @@ export default function Home({
                                             {room.description}
                                         </p>
 
-
                                         <div
                                             className="
                                                 mb-6
@@ -819,29 +678,22 @@ export default function Home({
                                                 gap-2
                                             "
                                         >
-
-                                            {room.features?.map(
-                                                (feature) => (
-
-                                                    <span
-                                                        key={feature}
-                                                        className="
-                                                            rounded-full
-                                                            bg-gray-100
-                                                            px-3
-                                                            py-1.5
-                                                            text-xs
-                                                            text-gray-600
-                                                        "
-                                                    >
-                                                        {feature}
-                                                    </span>
-
-                                                )
-                                            )}
-
+                                            {room.amenities?.map((amenity) => (
+                                                <span
+                                                    key={amenity}
+                                                    className="
+                                                     rounded-full
+                                                      bg-gray-100
+                                                      px-3
+                                                      py-1.5
+                                                      text-xs
+                                                        text-gray-600
+                                                            "
+                                                >
+                                                    {amenity}
+                                                </span>
+                                            ))}
                                         </div>
-
 
                                         <div
                                             className="
@@ -854,13 +706,10 @@ export default function Home({
                                                 pt-5
                                             "
                                         >
-
                                             <div>
-
                                                 <span className="text-xs text-gray-500">
                                                     شروع قیمت از
                                                 </span>
-
 
                                                 <p
                                                     className="
@@ -869,9 +718,7 @@ export default function Home({
                                                         text-[#A98518]
                                                     "
                                                 >
-                                                    {formatPrice(
-                                                        room.price
-                                                    )}
+                                                    {formatPrice(room.price)}
 
                                                     <span
                                                         className="
@@ -882,11 +729,8 @@ export default function Home({
                                                     >
                                                         تومان / شب
                                                     </span>
-
                                                 </p>
-
                                             </div>
-
 
                                             <Link
                                                 href={`/rooms/${room.id}`}
@@ -906,20 +750,13 @@ export default function Home({
                                             >
                                                 مشاهده اتاق
                                             </Link>
-
                                         </div>
-
                                     </div>
-
                                 </article>
-
                             ))}
-
                         </div>
 
-
                         <div className="mt-12 text-center">
-
                             <Link
                                 href="/rooms"
                                 className="
@@ -936,20 +773,15 @@ export default function Home({
                             >
                                 مشاهده همه اتاق‌ها
                             </Link>
-
                         </div>
-
                     </div>
-
                 </section>
-
 
                 {/* =====================================
                     FACILITIES
                 ====================================== */}
 
                 <section className="py-24">
-
                     <div
                         className="
                             mx-auto
@@ -959,14 +791,12 @@ export default function Home({
                             lg:px-12
                         "
                     >
-
                         <SectionTitle
                             centered
                             eyebrow="امکانات هتل"
                             title="هر آنچه برای یک اقامت راحت نیاز دارید"
                             description="خدمات و امکانات هتل آریا برای فراهم کردن آرامش و آسایش مهمانان طراحی شده‌اند."
                         />
-
 
                         <div
                             className="
@@ -978,9 +808,7 @@ export default function Home({
                                 lg:grid-cols-3
                             "
                         >
-
                             {facilityData.map((facility) => (
-
                                 <div
                                     key={facility.id}
                                     className="
@@ -995,7 +823,6 @@ export default function Home({
                                         hover:shadow-lg
                                     "
                                 >
-
                                     <div
                                         className="
                                             mb-5
@@ -1010,31 +837,21 @@ export default function Home({
                                             text-[#A98518]
                                         "
                                     >
-                                        <FacilityIcon
-                                            type={facility.icon}
-                                        />
+                                        <FacilityIcon type={facility.icon} />
                                     </div>
-
 
                                     <h3 className="mb-3 text-lg font-bold">
                                         {facility.title}
                                     </h3>
 
-
                                     <p className="leading-8 text-gray-600">
                                         {facility.description}
                                     </p>
-
                                 </div>
-
                             ))}
-
                         </div>
-
                     </div>
-
                 </section>
-
 
                 {/* =====================================
                     STATS
@@ -1047,7 +864,6 @@ export default function Home({
                         text-white
                     "
                 >
-
                     <div
                         className="
                             mx-auto
@@ -1061,7 +877,6 @@ export default function Home({
                             md:px-10
                         "
                     >
-
                         <Stat number="+۳۰" label="اتاق و سوئیت" />
 
                         <Stat number="+۱۰" label="سال تجربه" />
@@ -1069,18 +884,14 @@ export default function Home({
                         <Stat number="+۵۰۰۰" label="مهمان راضی" />
 
                         <Stat number="۲۴/۷" label="پشتیبانی" />
-
                     </div>
-
                 </section>
-
 
                 {/* =====================================
                     GALLERY
                 ====================================== */}
 
                 <section className="bg-[#F8F6F1] py-24">
-
                     <div
                         className="
                             mx-auto
@@ -1090,13 +901,11 @@ export default function Home({
                             lg:px-12
                         "
                     >
-
                         <SectionTitle
                             centered
                             eyebrow="گالری تصاویر"
                             title="نگاهی به فضای هتل آریا"
                         />
-
 
                         <div
                             className="
@@ -1107,14 +916,12 @@ export default function Home({
                                 md:grid-cols-4
                             "
                         >
-
                             {[
-                                "/pictures/gallery/gallery-1.jpg",
-                                "/pictures/gallery/gallery-2.jpg",
-                                "/pictures/gallery/gallery-3.jpg",
-                                "/pictures/gallery/gallery-4.jpg",
+                                "/pictures/gallery-1.png",
+                                "/pictures/gallery-2.png",
+                                "/pictures/gallery-3.png",
+                                "/pictures/gallery-4.png",
                             ].map((image) => (
-
                                 <img
                                     key={image}
                                     src={image}
@@ -1130,22 +937,16 @@ export default function Home({
                                         md:h-72
                                     "
                                 />
-
                             ))}
-
                         </div>
-
                     </div>
-
                 </section>
-
 
                 {/* =====================================
                     TESTIMONIAL
                 ====================================== */}
 
                 <section className="py-24">
-
                     <div
                         className="
                             mx-auto
@@ -1155,13 +956,11 @@ export default function Home({
                             lg:px-12
                         "
                     >
-
                         <SectionTitle
                             centered
                             eyebrow="نظر مهمانان"
                             title="تجربه اقامت در هتل آریا"
                         />
-
 
                         <div
                             className="
@@ -1172,9 +971,7 @@ export default function Home({
                                 md:grid-cols-3
                             "
                         >
-
                             {testimonialData.map((testimonial) => (
-
                                 <article
                                     key={testimonial.id}
                                     className="
@@ -1185,7 +982,6 @@ export default function Home({
                                         shadow-sm
                                     "
                                 >
-
                                     <FaQuoteRight
                                         className="
                                             mb-5
@@ -1193,7 +989,6 @@ export default function Home({
                                             text-[#C9A227]
                                         "
                                     />
-
 
                                     <p
                                         className="
@@ -1205,7 +1000,6 @@ export default function Home({
                                         {testimonial.comment}
                                     </p>
 
-
                                     <div
                                         className="
                                             mt-6
@@ -1216,40 +1010,24 @@ export default function Home({
                                             pt-5
                                         "
                                     >
-
-                                        <strong>
-                                            {testimonial.name}
-                                        </strong>
-
+                                        <strong>{testimonial.name}</strong>
 
                                         <div className="flex gap-1 text-[#C9A227]">
-
                                             {Array.from(
                                                 {
-                                                    length:
-                                                        testimonial.rating,
+                                                    length: testimonial.rating,
                                                 },
                                                 (_, index) => (
-
                                                     <FaStar key={index} />
-
-                                                )
+                                                ),
                                             )}
-
                                         </div>
-
                                     </div>
-
                                 </article>
-
                             ))}
-
                         </div>
-
                     </div>
-
                 </section>
-
 
                 {/* =====================================
                     CONTACT
@@ -1263,7 +1041,6 @@ export default function Home({
                         text-white
                     "
                 >
-
                     <div
                         className="
                             mx-auto
@@ -1277,9 +1054,7 @@ export default function Home({
                             lg:px-12
                         "
                     >
-
                         <div>
-
                             <span
                                 className="
                                     mb-3
@@ -1291,7 +1066,6 @@ export default function Home({
                                 تماس با ما
                             </span>
 
-
                             <h2
                                 className="
                                     mb-6
@@ -1300,10 +1074,9 @@ export default function Home({
                                     md:text-4xl
                                 "
                             >
-                                برای رزرو یا دریافت اطلاعات با ما
-                                در ارتباط باشید
+                                برای رزرو یا دریافت اطلاعات با ما در ارتباط
+                                باشید
                             </h2>
-
 
                             <p
                                 className="
@@ -1313,11 +1086,9 @@ export default function Home({
                                     text-gray-400
                                 "
                             >
-                                همکاران ما در تمام ساعات
-                                شبانه‌روز آماده پاسخگویی به
-                                سوالات شما هستند.
+                                همکاران ما در تمام ساعات شبانه‌روز آماده
+                                پاسخگویی به سوالات شما هستند.
                             </p>
-
 
                             <ContactItem
                                 icon={<FaPhoneAlt />}
@@ -1326,7 +1097,6 @@ export default function Home({
                                 href={`tel:${hotelData.phone}`}
                             />
 
-
                             <ContactItem
                                 icon={<FaEnvelope />}
                                 title="ایمیل"
@@ -1334,15 +1104,12 @@ export default function Home({
                                 href={`mailto:${hotelData.email}`}
                             />
 
-
                             <ContactItem
                                 icon={<FaMapMarkerAlt />}
                                 title="آدرس"
                                 value={hotelData.address}
                             />
-
                         </div>
-
 
                         <form
                             className="
@@ -1353,7 +1120,6 @@ export default function Home({
                                 md:p-9
                             "
                         >
-
                             <h3
                                 className="
                                     mb-7
@@ -1364,7 +1130,6 @@ export default function Home({
                                 ارسال پیام
                             </h3>
 
-
                             <div
                                 className="
                                     grid
@@ -1373,32 +1138,19 @@ export default function Home({
                                     md:grid-cols-2
                                 "
                             >
-
                                 <ContactInput
                                     label="نام و نام خانوادگی"
                                     type="text"
                                 />
 
-                                <ContactInput
-                                    label="شماره تماس"
-                                    type="tel"
-                                />
-
+                                <ContactInput label="شماره تماس" type="tel" />
                             </div>
 
-
                             <div className="mt-5">
-
-                                <ContactInput
-                                    label="ایمیل"
-                                    type="email"
-                                />
-
+                                <ContactInput label="ایمیل" type="email" />
                             </div>
 
-
                             <div className="mt-5">
-
                                 <label
                                     className="
                                         mb-2
@@ -1425,9 +1177,7 @@ export default function Home({
                                         focus:border-[#C9A227]
                                     "
                                 />
-
                             </div>
-
 
                             <button
                                 type="button"
@@ -1446,13 +1196,9 @@ export default function Home({
                             >
                                 ارسال پیام
                             </button>
-
                         </form>
-
                     </div>
-
                 </section>
-
 
                 {/* =====================================
                     CTA
@@ -1466,7 +1212,6 @@ export default function Home({
                         text-white
                     "
                 >
-
                     <div
                         className="
                             mx-auto
@@ -1481,9 +1226,7 @@ export default function Home({
                             md:text-right
                         "
                     >
-
                         <div>
-
                             <h2 className="text-2xl font-bold md:text-3xl">
                                 برای یک اقامت خاطره‌انگیز آماده‌اید؟
                             </h2>
@@ -1491,9 +1234,7 @@ export default function Home({
                             <p className="mt-3 text-white/80">
                                 همین حالا اتاق مناسب خود را پیدا کنید.
                             </p>
-
                         </div>
-
 
                         <Link
                             href="/rooms"
@@ -1510,20 +1251,14 @@ export default function Home({
                         >
                             رزرو اتاق
                         </Link>
-
                     </div>
-
                 </section>
 
-
                 <Footer hotel={hotelData} />
-
             </main>
         </>
     );
 }
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -1531,22 +1266,11 @@ export default function Home({
 |--------------------------------------------------------------------------
 */
 
-
-function SectionTitle({
-    eyebrow,
-    title,
-    description,
-    centered = false,
-}) {
+function SectionTitle({ eyebrow, title, description, centered = false }) {
     return (
         <div
-            className={
-                centered
-                    ? "mx-auto max-w-2xl text-center"
-                    : "max-w-2xl"
-            }
+            className={centered ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}
         >
-
             <span
                 className="
                     mb-3
@@ -1557,7 +1281,6 @@ function SectionTitle({
             >
                 {eyebrow}
             </span>
-
 
             <h2
                 className="
@@ -1570,9 +1293,7 @@ function SectionTitle({
                 {title}
             </h2>
 
-
             {description && (
-
                 <p
                     className="
                         mt-5
@@ -1582,14 +1303,10 @@ function SectionTitle({
                 >
                     {description}
                 </p>
-
             )}
-
         </div>
     );
 }
-
-
 
 function BookingField({ icon, label, children }) {
     return (
@@ -1605,14 +1322,9 @@ function BookingField({ icon, label, children }) {
                 px-4
             "
         >
-
-            <span className="text-xl text-[#C9A227]">
-                {icon}
-            </span>
-
+            <span className="text-xl text-[#C9A227]">{icon}</span>
 
             <div className="min-w-0 flex-1">
-
                 <label
                     className="
                         mb-1
@@ -1625,14 +1337,10 @@ function BookingField({ icon, label, children }) {
                 </label>
 
                 {children}
-
             </div>
-
         </div>
     );
 }
-
-
 
 function FacilityIcon({ type }) {
     const icons = {
@@ -1648,12 +1356,9 @@ function FacilityIcon({ type }) {
     return icons[type] ?? <FaStar />;
 }
 
-
-
 function Stat({ number, label }) {
     return (
         <div>
-
             <strong
                 className="
                     block
@@ -1675,19 +1380,11 @@ function Stat({ number, label }) {
             >
                 {label}
             </span>
-
         </div>
     );
 }
 
-
-
-function ContactItem({
-    icon,
-    title,
-    value,
-    href,
-}) {
+function ContactItem({ icon, title, value, href }) {
     const content = (
         <div
             className="
@@ -1696,7 +1393,6 @@ function ContactItem({
                 gap-4
             "
         >
-
             <div
                 className="
                     flex
@@ -1713,44 +1409,24 @@ function ContactItem({
                 {icon}
             </div>
 
-
             <div>
+                <span className="text-sm text-gray-400">{title}</span>
 
-                <span className="text-sm text-gray-400">
-                    {title}
-                </span>
-
-                <p className="mt-1">
-                    {value}
-                </p>
-
+                <p className="mt-1">{value}</p>
             </div>
-
         </div>
     );
 
-
     return (
         <div className="mb-5">
-
-            {href ? (
-                <a href={href}>
-                    {content}
-                </a>
-            ) : (
-                content
-            )}
-
+            {href ? <a href={href}>{content}</a> : content}
         </div>
     );
 }
 
-
-
 function ContactInput({ label, type }) {
     return (
         <div>
-
             <label
                 className="
                     mb-2
@@ -1761,7 +1437,6 @@ function ContactInput({ label, type }) {
             >
                 {label}
             </label>
-
 
             <input
                 type={type}
@@ -1777,7 +1452,6 @@ function ContactInput({ label, type }) {
                     focus:border-[#C9A227]
                 "
             />
-
         </div>
     );
 }

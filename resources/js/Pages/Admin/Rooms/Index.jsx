@@ -107,7 +107,7 @@ export default function Index({ rooms = [] }) {
         <AdminLayout>
             <Head title="مدیریت اتاق‌ها" />
 
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 className="text-2xl font-black text-slate-900">
                         مدیریت اتاق‌ها
@@ -120,7 +120,7 @@ export default function Index({ rooms = [] }) {
 
                 <Link
                     href="/admin/rooms/create"
-                    className="flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white sm:w-auto"
                 >
                     <Plus size={18} />
                     افزودن اتاق

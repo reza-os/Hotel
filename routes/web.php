@@ -24,19 +24,19 @@ use App\Models\Room;
 
 Route::get('/', function () {
 
-    $rooms = Room::query()
+    $featuredRooms = Room::query()
         ->where('is_active', true)
         ->where('operational_status', 'ready')
         ->latest()
-        ->take(6)
+        ->take(3)
         ->get();
 
     return Inertia::render('HotelHomepage', [
-        'rooms' => $rooms,
-
+        'featuredRooms' => $featuredRooms,
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
+
 })->name('home');
 
 /*

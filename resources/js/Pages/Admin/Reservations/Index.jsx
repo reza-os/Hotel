@@ -63,8 +63,8 @@ export default function Index({ reservations = [] }) {
                 </div>
             )}
 
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                <table className="w-full text-right">
+            <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+                <table className="w-full min-w-[1000px] text-right">
                     <thead className="bg-slate-50 text-sm text-slate-500">
                         <tr>
                             <th className="p-4">مشتری</th>
