@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router ,usePage } from "@inertiajs/react";
 
 import {
     FaArrowLeft,
@@ -78,93 +78,93 @@ export default function Home({
         facilities.length > 0
             ? facilities
             : [
-                  {
-                      id: 1,
-                      title: "اینترنت رایگان",
-                      description:
-                          "اینترنت پرسرعت در اتاق‌ها و بخش‌های عمومی هتل.",
+                {
+                    id: 1,
+                    title: "اینترنت رایگان",
+                    description:
+                        "اینترنت پرسرعت در اتاق‌ها و بخش‌های عمومی هتل.",
 
-                      icon: "wifi",
-                  },
+                    icon: "wifi",
+                },
 
-                  {
-                      id: 2,
-                      title: "رستوران",
-                      description:
-                          "رستوران با منوی متنوع غذاهای ایرانی و بین‌المللی.",
+                {
+                    id: 2,
+                    title: "رستوران",
+                    description:
+                        "رستوران با منوی متنوع غذاهای ایرانی و بین‌المللی.",
 
-                      icon: "restaurant",
-                  },
+                    icon: "restaurant",
+                },
 
                   {
                       id: 3,
                       title: "پارکینگ اختصاصی",
                       description: "پارکینگ امن و اختصاصی برای مهمانان هتل.",
 
-                      icon: "parking",
-                  },
+                    icon: "parking",
+                },
 
-                  {
-                      id: 4,
-                      title: "خدمات ۲۴ ساعته",
-                      description:
-                          "پاسخگویی و خدمات‌رسانی در تمام ساعات شبانه‌روز.",
+                {
+                    id: 4,
+                    title: "خدمات ۲۴ ساعته",
+                    description:
+                        "پاسخگویی و خدمات‌رسانی در تمام ساعات شبانه‌روز.",
 
-                      icon: "service",
-                  },
+                    icon: "service",
+                },
 
-                  {
-                      id: 5,
-                      title: "استخر",
-                      description:
-                          "فضای آرام و مجهز برای استراحت و تفریح مهمانان.",
+                {
+                    id: 5,
+                    title: "استخر",
+                    description:
+                        "فضای آرام و مجهز برای استراحت و تفریح مهمانان.",
 
-                      icon: "pool",
-                  },
+                    icon: "pool",
+                },
 
                   {
                       id: 6,
                       title: "صبحانه",
                       description: "صبحانه متنوع و تازه برای شروع یک روز عالی.",
 
-                      icon: "breakfast",
-                  },
-              ];
+                    icon: "breakfast",
+                },
+            ];
 
     const testimonialData =
         testimonials.length > 0
             ? testimonials
             : [
-                  {
-                      id: 1,
-                      name: "علی رضایی",
+                {
+                    id: 1,
+                    name: "علی رضایی",
 
-                      comment:
-                          "محیط هتل بسیار آرام و تمیز بود و برخورد کارکنان واقعاً عالی بود.",
+                    comment:
+                        "محیط هتل بسیار آرام و تمیز بود و برخورد کارکنان واقعاً عالی بود.",
 
-                      rating: 5,
-                  },
+                    rating: 5,
+                },
 
-                  {
-                      id: 2,
-                      name: "سارا احمدی",
+                {
+                    id: 2,
+                    name: "سارا احمدی",
 
-                      comment:
-                          "اتاق دلوکس بسیار زیبا بود و کیفیت خدمات از چیزی که انتظار داشتم بهتر بود.",
+                    comment:
+                        "اتاق دلوکس بسیار زیبا بود و کیفیت خدمات از چیزی که انتظار داشتم بهتر بود.",
 
-                      rating: 5,
-                  },
+                    rating: 5,
+                },
 
-                  {
-                      id: 3,
-                      name: "محمد کریمی",
+                {
+                    id: 3,
+                    name: "محمد کریمی",
 
-                      comment:
-                          "دسترسی مناسب، محیط تمیز و صبحانه خوب. تجربه اقامت بسیار رضایت‌بخشی بود.",
+                    comment:
+                        "دسترسی مناسب، محیط تمیز و صبحانه خوب. تجربه اقامت بسیار رضایت‌بخشی بود.",
 
-                      rating: 4,
-                  },
-              ];
+                    rating: 4,
+                },
+            ];
 
     /*
     |--------------------------------------------------------------------------
@@ -219,6 +219,26 @@ export default function Home({
 
         return `/storage/${image}`;
     };
+
+
+    const getRoomImage = (image) => {
+        if (!image) {
+            return "/pictures/rooms/room-1.jpg";
+        }
+
+        if (
+            image.startsWith("http://") ||
+            image.startsWith("https://") ||
+            image.startsWith("/")
+        ) {
+            return image;
+        }
+
+        return `/storage/${image}`;
+    };
+
+
+
 
     return (
         <>

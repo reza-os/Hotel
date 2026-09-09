@@ -22,6 +22,8 @@ use App\Models\Room;
 |--------------------------------------------------------------------------
 */
 
+
+
 Route::get('/', function () {
 
     $featuredRooms = Room::query()
